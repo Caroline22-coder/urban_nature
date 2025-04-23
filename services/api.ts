@@ -1,13 +1,28 @@
-const url = 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1';
-const options = {
-  method: 'GET',
+export const TMDB_CONFIG = {
+  BASE_URL: 'https://api.themoviedb.org/3',
+  API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyZDQwYjUwN2E0OGY1ODUxNzEwZWU0YmY2NzNlYjk4ZCIsIm5iZiI6MTc0NTM5Nzk5OC41NzIsInN1YiI6IjY4MDhhOGVlYjZjNjNkMjcwZmFhZGFmMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.84FC1xGEhaZgK7VneKjyccDPgxReCmjciDidv-RsyAc'
+    Authorization: 'Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}'
   }
-};
+}
 
-fetch(url, options)
-  .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.error(err));
+export const fetchMovies = async ({ query }: {query: string}) => {
+  const endpoint = query
+  ? '${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}'
+  : '${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc';
+
+  const response = await fetch(endpoint, {
+    method: 'GET',
+    headers: TMDB_CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch movies', response.statusText);
+  }
+
+  const date = await response.json();
+
+  return data.results;
+}
+
+
