@@ -21,7 +21,7 @@ export default function Index() {
   return (
     <View className="flex-1 bg-primary"> 
           <Image source={images.bg} className="absolute w-full z-0" /> 
-          <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{minHeight: "100%", paddingBottom: 10}}>
+          <View className="flex-1 px-5">
             <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" /> 
                 {moviesLoading ? (
                   <ActivityIndicator
@@ -40,20 +40,30 @@ export default function Index() {
               /> 
 
               <> 
-                  <Text className= "test-lg text-white font-bold mt-5 mb-3"> Latest Movies </Text>
-                  <View>
-                    {movies && movies.map((item) => (
-                      <Text key = {item.id} className= "text-white text-sm">
-                        {item.title}
-                      </Text>
-                    ))}
+                  <Text className= "test-lg font-bold mt-5 mb-3"> Latest Movies </Text>
+                  
+                  <FlatList
 
-                  </View>
+                    data={movies}
+                    renderItem={({item}) => (
+                      <Text> {item.title} </Text>
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                    numColumns={3}
+                    columnWrapperStyle={{
+                      justifyContent: 'flex-start',
+                      gap:20,
+                      paddingRight: 5,
+                      marginBottom:10 
+                    }}
+                    
+                    /> 
+
               </>
                     </View>
                 )}
 
-          </ScrollView>
+          </View>
     </View>
   );
 }
