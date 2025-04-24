@@ -9,4 +9,4 @@ const MovieDetails = () => {
     )
 }
 
-export default MovieDetails 
+export default MovieDetails; 
