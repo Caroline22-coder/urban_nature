@@ -5,6 +5,7 @@ import SearchBar from "@/components/SearchBar";
 import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
 import {fetchMovies} from "@/services/api";
+import MovieCard from "@/components/MovieCard"
 
 
 export default function Index() {
@@ -21,7 +22,7 @@ export default function Index() {
   return (
     <View className="flex-1 bg-primary"> 
           <Image source={images.bg} className="absolute w-full z-0" /> 
-          <View className="flex-1 px-5">
+          <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{minHeight: "100%", paddingBottom: 10}} >
             <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" /> 
                 {moviesLoading ? (
                   <ActivityIndicator
@@ -37,16 +38,18 @@ export default function Index() {
                     <SearchBar 
                           onPress={() => router.push("/search")}
                           placeholder= "Search for a movie"
-              /> 
+                    /> 
 
-              <> 
-                  <Text className= "test-lg font-bold mt-5 mb-3"> Latest Movies </Text>
+                  <> 
+                  <Text className= "test-lg text-white font-bold mt-5 mb-3"> Latest Movies </Text>
                   
                   <FlatList
 
                     data={movies}
                     renderItem={({item}) => (
-                      <Text> {item.title} </Text>
+                      <MovieCard
+                            {... item}
+                      /> 
                     )}
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={3}
@@ -56,14 +59,17 @@ export default function Index() {
                       paddingRight: 5,
                       marginBottom:10 
                     }}
-                    
-                    /> 
 
-              </>
-                    </View>
+                    className="mt-2 pb-32"
+                    scrollEnabled={true}
+                    
+                  /> 
+
+                  </>
+                </View>
                 )}
 
-          </View>
+          </ScrollView>
     </View>
   );
 }
