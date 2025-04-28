@@ -39,7 +39,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "TMDB_API_KEY": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyZDQwYjUwN2E0OGY1ODUxNzEwZWU0YmY2NzNlYjk4ZCIsIm5iZiI6MTc0NTM5Nzk5OC41NzIsInN1YiI6IjY4MDhhOGVlYjZjNjNkMjcwZmFhZGFmMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.84FC1xGEhaZgK7VneKjyccDPgxReCmjciDidv-RsyAc"
+      "TREFLE_API_KEY": "vCXGS-3CTvuiKDbgp6sr6asl_TP--Foj1L5Sy2np92E"
     }
   }
 }

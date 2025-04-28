@@ -4,18 +4,19 @@ import {icons} from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
 import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
-import {fetchMovies} from "@/services/api";
-import MovieCard from "@/components/MovieCard"
+import {fetchTrees} from "@/services/api";
+import TreeCard from "@/components/TreeCard";
+import MovieCard from "@/components/TreeCard"
 
 
 export default function Index() {
 
   const router= useRouter(); 
 
-  const{data : movies, 
-    loading: moviesLoading,
-    error: moviesError
-  } = useFetch( () => fetchMovies({
+  const{data : trees, 
+    loading: treesLoading,
+    error: treesError
+  } = useFetch( () => fetchTrees({
     query: ''}
   )) 
 
@@ -24,31 +25,34 @@ export default function Index() {
           <Image source={images.bg} className="absolute w-full z-0" /> 
           <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{minHeight: "100%", paddingBottom: 10}} >
             <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" /> 
-                {moviesLoading ? (
+                {treesLoading ? (
                   <ActivityIndicator
                     size="large"
                     color="#0000ff"
                     className="mt-10 self-center"
 
                   />
-                ) : moviesError ? (
-                  <Text> Error: {moviesError?.message} </Text>
+                ) : treesError ? (
+                  <Text> Error: {treesError?.message} </Text>
                 ) : ( 
                 <View className="flex-1 mt-5">
                     <SearchBar 
                           onPress={() => router.push("/search")}
-                          placeholder= "Search for a movie"
+                          placeholder= "Search for a tree"
                     /> 
 
                   <> 
-                  <Text className= "test-lg text-white font-bold mt-5 mb-3"> Latest Movies </Text>
+                  <Text className= "test-lg text-white font-bold mt-5 mb-3"> Tree Species </Text>
                   
                   <FlatList
 
-                    data={movies}
+                    data={trees}
                     renderItem={({item}) => (
-                      <MovieCard
-                            {... item}
+                      <TreeCard
+                            id={item.id}
+                            name={item.name}
+                            scientific_name={item.scientific_name}
+                            image_url={item.image_url}
                       /> 
                     )}
                     keyExtractor={(item) => item.id.toString()}

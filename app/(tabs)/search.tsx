@@ -2,9 +2,9 @@ import {View, Text, Image, FlatList} from 'react-native'
 import React from 'react'
 import {images} from "@/constants/images";
 import  useFetch from "@/services/useFetch";
-import {fetchMovies} from "@/services/api";
+import {fetchTrees} from "@/services/api";
 import {useRouter} from "expo-router";
-import MovieCard from "@/components/MovieCard";
+import TreeCard from "@/components/TreeCard";
 import {icons} from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
 import {ActivityIndicator} from "react-native-paper";
@@ -18,7 +18,7 @@ const Search = () => {
   const{data : movies, 
     loading,
     error
-  } = useFetch( () => fetchMovies({
+  } = useFetch( () => fetchTrees({
     query: ''}
   )) 
     return (
@@ -27,7 +27,7 @@ const Search = () => {
             <FlatList 
                 data={movies}
                 renderItem={({item}) =>
-                   <MovieCard
+                   <TreeCard
                         {... item}
                     /> }
                 keyExtractor={(item) => item.id.toString()}
