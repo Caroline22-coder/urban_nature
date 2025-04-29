@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MovieFlix",
-    "slug": "mobile_movie_app",
+    "name": "TreeExplorer",
+    "slug": "mobile_tree_app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.mobile_movie_app"
+      "package": "com.anonymous.mobile_tree_app"
     },
     "web": {
       "bundler": "metro",
