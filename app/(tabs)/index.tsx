@@ -6,14 +6,15 @@ import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
 import {fetchTrees} from "@/services/api";
 import TreeCard from "@/components/TreeCard";
-import MovieCard from "@/components/TreeCard"
+
 
 
 export default function Index() {
 
   const router= useRouter(); 
 
-  const{data : trees, 
+  const{
+    data : trees, 
     loading: treesLoading,
     error: treesError
   } = useFetch( () => fetchTrees({
