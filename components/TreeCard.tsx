@@ -1,13 +1,13 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
-import {Link} from 'expo-router';
+import {Link} from 'expo-router'; 
 import {icons} from '@/constants/icons';
 
 const TreeCard = ({ id, name, scientific_name, image_url} : any) => {
     console.log(image_url);
     
     return (
-      
+      <Link href={`/tree/${id}`} asChild>
             <TouchableOpacity className="w-[30%]">
                 <Image
                     source={{
@@ -23,6 +23,8 @@ const TreeCard = ({ id, name, scientific_name, image_url} : any) => {
                 <Text className= "text-xs text-white italic"> {scientific_name} </Text>
 
             </TouchableOpacity>
+
+        </Link>
        
        
     );

@@ -8,7 +8,7 @@ export default function RootLayout() {
     options= {{ headerShown: false}}
     /> 
     <Stack.Screen 
-    name = "movie/[id]"
+    name = "tree/[id]"
     options= {{ headerShown: false}}
     /> 
   </Stack>
