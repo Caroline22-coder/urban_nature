@@ -7,7 +7,11 @@ const TreeCard = ({ id, name, scientific_name, image_url} : any) => {
     console.log(image_url);
     
     return (
-      <Link href={`/tree/${id}`} asChild>
+      <Link href={{
+        pathname : "/tree/[id]",
+        params : {id, image_url}
+    }}
+        >
             <TouchableOpacity className="w-[30%]">
                 <Image
                     source={{
@@ -17,7 +21,7 @@ const TreeCard = ({ id, name, scientific_name, image_url} : any) => {
                     className="w-full h-52 rounded-lg"
                     resizeMode="cover"
 
-                /> 
+            /> 
 
                 <Text className= "text-sm font-bold text-white mt-2" numberOfLines={1}> {name} </Text>
                 <Text className= "text-xs text-white italic"> {scientific_name} </Text>
