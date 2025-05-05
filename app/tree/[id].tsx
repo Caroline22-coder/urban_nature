@@ -8,9 +8,20 @@ const TreeDetails = () => {
 
     return (
         <View className= "bg-primary flex-1">
-            <Text> {name} </Text>
-            <Image source={{uri: image_url}} className="w-full h-52 rounded-lg" resizeMode="cover" />
-        </View>
+            <ScrollView contentContainerStyle={{paddingBottom: 80}}>
+                <Image source={{uri: image_url}} className="w-full h-52 rounded-lg" resizeMode="cover" />
+            </ScrollView> 
+
+            <Text className="text-light-200 text-sm">
+                {name}
+            </Text>
+            <Text className="text-light-200 text-sm">
+                {id}
+            </Text>
+        </View> 
+
+
+
     )
 }
 
