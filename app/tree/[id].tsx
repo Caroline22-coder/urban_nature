@@ -4,12 +4,12 @@ import { useLocalSearchParams } from 'expo-router';
 
 const TreeDetails = () => {
 
-    const { id, image_url } = useLocalSearchParams();
+    const { id, name, image_url } = useLocalSearchParams();
 
     return (
         <View className= "bg-primary flex-1">
-            <Text> {id} this is the id </Text>
-            <Image source={{ uri : image_url }} className = "w-52 h-52" /> 
+            <Text> {name} </Text>
+            <Image source={{uri: image_url}} className="w-full h-52 rounded-lg" resizeMode="cover" />
         </View>
     )
 }

@@ -9,8 +9,8 @@ const TreeCard = ({ id, name, scientific_name, image_url} : any) => {
     return (
       <Link href={{
         pathname : "/tree/[id]",
-        params : {id, image_url}
-    }}
+        params : {id, name, image_url}}}
+        asChild 
         >
             <TouchableOpacity className="w-[30%]">
                 <Image
