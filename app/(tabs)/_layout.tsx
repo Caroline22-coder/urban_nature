@@ -103,15 +103,15 @@ const _Layout = () => {
             }}
             /> 
             <Tabs.Screen
-            name= "profile"
+            name= "biodiversity_assessment"
             options= {{
-                title: 'Profile',
+                title: 'Biodiversity_assessment',
                 headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     <TabIcon 
                     focused={focused}
                     icon={icons.person}
-                    title="Profile" 
+                    title="Biodiversity_assessment" 
                     /> 
 
                 )
