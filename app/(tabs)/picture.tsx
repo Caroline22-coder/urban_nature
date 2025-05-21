@@ -10,7 +10,7 @@ import { Image } from "expo-image";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-
+ 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
@@ -83,7 +83,7 @@ export default function App() {
     console.log("FormData:", formData); // Log the FormData object
   
     try {
-      const response = await fetch("http://192.168.65.226:5000/analyze", {
+      const response = await fetch("http://192.168.246.226:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
