@@ -10,6 +10,10 @@ const MODELS = [
   {
     name: 'Clover',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/little_clover.glb',
+  },
+  {
+    name: 'Grass',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/grass.glb'
   }
   // Add more models as needed
 ]
