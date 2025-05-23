@@ -10,7 +10,10 @@ import { Image } from "expo-image";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
- 
+import * as Location from "expo-location";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
@@ -18,6 +21,8 @@ export default function App() {
   const [mode, setMode] = useState<CameraMode>("picture");
   const [facing, setFacing] = useState<CameraType>("back");
   const [recording, setRecording] = useState(false);
+  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
 
   if (!permission) {
     return null;
@@ -44,6 +49,18 @@ export default function App() {
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
     setUri(photo?.uri);
+    setAnalysisResult(null); // Reset previous analysis
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "Location permission is required.");
+      setLocation(null);
+      return;
+    }
+    let loc = await Location.getCurrentPositionAsync({});
+    setLocation({
+      latitude: loc.coords.latitude,
+      longitude: loc.coords.longitude,
+    });
   };
 
   const recordVideo = async () => {
@@ -70,43 +87,54 @@ export default function App() {
       Alert.alert("No image found", "Please take a picture first.");
       return;
     }
-  
-    console.log("Image URI:", uri); // Log the URI to verify it
-  
+
     const formData = new FormData();
     formData.append("image", {
       uri: uri,
       name: "photo.jpg",
       type: "image/jpeg",
-    });
-  
-    console.log("FormData:", formData); // Log the FormData object
-  
+    } as any);
+
     try {
-      const response = await fetch("http://192.168.246.226:5000/analyze", {
+      const response = await fetch("http://192.168.34.226:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
         },
         body: formData,
       });
-  
-      console.log("Response status:", response.status); // Log the response status
+
       const data = await response.json();
-      console.log("Response data:", data); // Log the response data
-  
+      setAnalysisResult(data);
+
       if (data.error) {
         Alert.alert("Error", data.error);
       } else {
         Alert.alert(
           "Analysis Result",
-          `Common Name: ${data.common_name}\nScientific Name: ${data.scientific_name}\nFamily: ${data.family}\nGenus: ${data.genus}\nScore: ${data.score}`
+          `Common Name: ${data.common_name}\nScientific Name: ${data.scientific_name}\nFamily: ${data.family}\nGenus: ${data.genus}\nScore: ${data.score}\nLatitude: ${location?.latitude}\nLongitude: ${location?.longitude}`
         );
       }
     } catch (error) {
       Alert.alert("Error", "Failed to analyze the species.");
-      console.error("Error:", error); // Log the error
+      console.error("Error:", error);
     }
+  };
+
+  const exportToJson = async () => {
+    if (!analysisResult || !location || !uri) {
+      Alert.alert("Nothing to export", "Please take a picture and analyze it first.");
+      return;
+    }
+    const exportData = {
+      imageUri: uri,
+      analysis: analysisResult,
+      location,
+      timestamp: new Date().toISOString(),
+    };
+    const fileUri = FileSystem.documentDirectory + "analysis_export.json";
+    await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(exportData, null, 2));
+    await Sharing.shareAsync(fileUri);
   };
 
   const renderPicture = () => {
@@ -117,8 +145,15 @@ export default function App() {
           contentFit="contain"
           style={{ width: 300, aspectRatio: 1 }}
         />
+        <Text>
+          Latitude: {location?.latitude ?? "N/A"} {"\n"}
+          Longitude: {location?.longitude ?? "N/A"}
+        </Text>
         <Button onPress={() => setUri(null)} title="Take another picture" />
         <Button title="Analyse the species" onPress={analyzeSpecies} />
+        {analysisResult && (
+          <Button title="Export to JSON" onPress={exportToJson} />
+        )}
       </View>
     );
   };
