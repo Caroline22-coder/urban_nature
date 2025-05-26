@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 const MyMapApp = () => {
@@ -51,6 +51,14 @@ const MyMapApp = () => {
           title="Your Location"
           description="You are here"
         />
+        <Marker
+          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          title="Custom Marker"
+          description="This is a custom marker with a callout"
+          pinColor="blue"
+        />
+        
+
       </MapView>
     </View>
   );
