@@ -13,8 +13,10 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import {useRouter} from "expo-router";
 
 export default function App() {
+  const router = useRouter(); 
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(null);
@@ -154,6 +156,7 @@ export default function App() {
         {analysisResult && (
           <Button title="Export to JSON" onPress={exportToJson} />
         )}
+        <Button title="View on the map" onPress={() => router.push("/map")} /> 
       </View>
     );
   };
