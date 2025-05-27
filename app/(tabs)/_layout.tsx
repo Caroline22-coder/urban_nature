@@ -88,30 +88,30 @@ const _Layout = () => {
             
             /> 
             <Tabs.Screen
-            name= "saved"
+            name= "AR"
             options= {{
-                title: 'Saved',
+                title: 'AR',
                 headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     <TabIcon 
                     focused={focused}
                     icon={icons.save}
-                    title="Saved" 
+                    title="AR" 
                     /> 
 
                 ) 
             }}
             /> 
             <Tabs.Screen
-            name= "biodiversity_assessment"
+            name= "citizen_science"
             options= {{
-                title: 'Biodiversity_assessment',
+                title: 'Citizen Science',
                 headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     <TabIcon 
                     focused={focused}
                     icon={icons.person}
-                    title="Biodiversity_assessment" 
+                    title="Citizen Science" 
                     /> 
 
                 )
