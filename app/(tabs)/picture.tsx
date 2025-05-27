@@ -13,10 +13,11 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
-import {useRouter} from "expo-router";
+import { useRouter } from "expo-router";
+import { useSpeciesAnalysis } from "../speciesAnalysis";
 
 export default function App() {
-  const router = useRouter(); 
+  const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(null);
@@ -25,6 +26,7 @@ export default function App() {
   const [recording, setRecording] = useState(false);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const { addAnalysis } = useSpeciesAnalysis();
 
   if (!permission) {
     return null;
@@ -34,7 +36,7 @@ export default function App() {
     const handleRequestPermission = async () => {
       const result = await requestPermission();
       if (result.granted) {
-        setPermission(result); // Force a re-render by updating the state
+        // No need to setPermission, useCameraPermissions handles it
       }
     };
 
@@ -109,6 +111,16 @@ export default function App() {
       const data = await response.json();
       setAnalysisResult(data);
 
+      if (!data.error && location && uri) {
+        addAnalysis({
+          id: Date.now().toString(),
+          imageUri: uri,
+          analysis: data,
+          location,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
       if (data.error) {
         Alert.alert("Error", data.error);
       } else {
@@ -156,7 +168,7 @@ export default function App() {
         {analysisResult && (
           <Button title="Export to JSON" onPress={exportToJson} />
         )}
-        <Button title="View on the map" onPress={() => router.push("/map")} /> 
+        <Button title="View on the map" onPress={() => router.push("/map")} />
       </View>
     );
   };

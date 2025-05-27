@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { useSpeciesAnalysis } from './speciesAnalysis';
 
 const MyMapApp = () => {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [loading, setLoading] = useState(true);
+  const { analyses } = useSpeciesAnalysis();
 
   useEffect(() => {
     (async () => {
-      // No permission request here, assume already granted
       let location = await Location.getCurrentPositionAsync({});
       setUserLocation({
         latitude: location.coords.latitude,
@@ -46,19 +47,19 @@ const MyMapApp = () => {
           longitudeDelta: 0.01,
         }}
       >
-        <Marker
-          coordinate={userLocation}
-          title="Your Location"
-          description="You are here"
-        />
-        <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          title="Custom Marker"
-          description="This is a custom marker"
-          pinColor="blue"
-        />
-        
-
+    
+        {/* Analysed species markers */}
+        {analyses.map((item) => (
+          <Marker
+            key={item.id}
+            coordinate={item.location}
+            title={item.analysis.common_name}
+            description={item.analysis.scientific_name}
+            pinColor="blue"
+          >
+           
+          </Marker>
+        ))}
       </MapView>
     </View>
   );
