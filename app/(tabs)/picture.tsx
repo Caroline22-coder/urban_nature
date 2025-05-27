@@ -1,15 +1,7 @@
-import {
-  CameraMode,
-  CameraType,
-  CameraView,
-  useCameraPermissions,
-} from "expo-camera";
-import { useRef, useState } from "react";
-import { Button, Pressable, StyleSheet, Text, View, Alert } from "react-native";
+import { useState } from "react";
+import { Button, StyleSheet, Text, View, Alert } from "react-native";
 import { Image } from "expo-image";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Feather from "@expo/vector-icons/Feather";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
@@ -18,72 +10,34 @@ import { useSpeciesAnalysis } from "../speciesAnalysis";
 
 export default function App() {
   const router = useRouter();
-  const [permission, requestPermission] = useCameraPermissions();
-  const ref = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(null);
-  const [mode, setMode] = useState<CameraMode>("picture");
-  const [facing, setFacing] = useState<CameraType>("back");
-  const [recording, setRecording] = useState(false);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const { addAnalysis } = useSpeciesAnalysis();
 
-  if (!permission) {
-    return null;
-  }
-
-  if (!permission.granted) {
-    const handleRequestPermission = async () => {
-      const result = await requestPermission();
-      if (result.granted) {
-        // No need to setPermission, useCameraPermissions handles it
-      }
-    };
-
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
-          We need your permission to use the camera
-        </Text>
-        <Button onPress={handleRequestPermission} title="Grant permission" />
-      </View>
-    );
-  }
-
   const takePicture = async () => {
-    const photo = await ref.current?.takePictureAsync();
-    setUri(photo?.uri);
-    setAnalysisResult(null); // Reset previous analysis
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission denied", "Location permission is required.");
-      setLocation(null);
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+
+    if (cameraStatus !== "granted" || locationStatus !== "granted") {
+      Alert.alert("Permission denied", "Camera and location permissions are required.");
       return;
     }
-    let loc = await Location.getCurrentPositionAsync({});
-    setLocation({
-      latitude: loc.coords.latitude,
-      longitude: loc.coords.longitude,
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
     });
-  };
 
-  const recordVideo = async () => {
-    if (recording) {
-      setRecording(false);
-      ref.current?.stopRecording();
-      return;
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setUri(result.assets[0].uri);
+      setAnalysisResult(null);
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation({
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      });
     }
-    setRecording(true);
-    const video = await ref.current?.recordAsync();
-    console.log({ video });
-  };
-
-  const toggleMode = () => {
-    setMode((prev) => (prev === "picture" ? "video" : "picture"));
-  };
-
-  const toggleFacing = () => {
-    setFacing((prev) => (prev === "back" ? "front" : "back"));
   };
 
   const analyzeSpecies = async () => {
@@ -151,78 +105,29 @@ export default function App() {
     await Sharing.shareAsync(fileUri);
   };
 
-  const renderPicture = () => {
-    return (
-      <View>
-        <Image
-          source={{ uri }}
-          contentFit="contain"
-          style={{ width: 300, aspectRatio: 1 }}
-        />
-        <Text>
-          Latitude: {location?.latitude ?? "N/A"} {"\n"}
-          Longitude: {location?.longitude ?? "N/A"}
-        </Text>
-        <Button onPress={() => setUri(null)} title="Take another picture" />
-        <Button title="Analyse the species" onPress={analyzeSpecies} />
-        {analysisResult && (
-          <Button title="Export to JSON" onPress={exportToJson} />
-        )}
-        <Button title="View on the map" onPress={() => router.push("/map")} />
-      </View>
-    );
-  };
-
-  const renderCamera = () => {
-    return (
-      <CameraView
-        style={styles.camera}
-        ref={ref}
-        mode={mode}
-        facing={facing}
-        mute={false}
-        responsiveOrientationWhenOrientationLocked
-      >
-        <View style={styles.shutterContainer}>
-          <Pressable onPress={toggleMode}>
-            {mode === "picture" ? (
-              <AntDesign name="picture" size={32} color="white" />
-            ) : (
-              <Feather name="video" size={32} color="white" />
-            )}
-          </Pressable>
-          <Pressable onPress={mode === "picture" ? takePicture : recordVideo}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.shutterBtn,
-                  {
-                    opacity: pressed ? 0.5 : 1,
-                  },
-                ]}
-              >
-                <View
-                  style={[
-                    styles.shutterBtnInner,
-                    {
-                      backgroundColor: mode === "picture" ? "white" : "red",
-                    },
-                  ]}
-                />
-              </View>
-            )}
-          </Pressable>
-          <Pressable onPress={toggleFacing}>
-            <FontAwesome6 name="rotate-left" size={32} color="white" />
-          </Pressable>
-        </View>
-      </CameraView>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      {uri ? renderPicture() : renderCamera()}
+      {!uri ? (
+        <Button title="Take a picture" onPress={takePicture} />
+      ) : (
+        <View>
+          <Image
+            source={{ uri }}
+            contentFit="contain"
+            style={{ width: 300, aspectRatio: 1 }}
+          />
+          <Text>
+            Latitude: {location?.latitude ?? "N/A"} {"\n"}
+            Longitude: {location?.longitude ?? "N/A"}
+          </Text>
+          <Button onPress={() => setUri(null)} title="Take another picture" />
+          <Button title="Analyse the species" onPress={analyzeSpecies} />
+          {analysisResult && (
+            <Button title="Export to JSON" onPress={exportToJson} />
+          )}
+          <Button title="View on the map" onPress={() => router.push("/map")} />
+        </View>
+      )}
     </View>
   );
 }
@@ -233,34 +138,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
-  camera: {
-    flex: 1,
-    width: "100%",
-  },
-  shutterContainer: {
-    position: "absolute",
-    bottom: 44,
-    left: 0,
-    width: "100%",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 30,
-  },
-  shutterBtn: {
-    backgroundColor: "transparent",
-    borderWidth: 5,
-    borderColor: "white",
-    width: 85,
-    height: 85,
-    borderRadius: 45,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  shutterBtnInner: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
   },
 });
