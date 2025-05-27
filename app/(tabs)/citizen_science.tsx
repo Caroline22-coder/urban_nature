@@ -27,9 +27,16 @@ const criteria = [
   { id: 'humanImpact', label: 'Human impact' }
 ];
 
+const valueLabels = ["Very low", "Low", "Medium", "High", "Very high"];
+
 export default function BiodiversityAssessment() {
   const [ratings, setRatings] = useState<Record<number, Rating>>({});
   const [images, setImages] = useState<ImageData[]>(defaultImages);
+  const [activeBubble, setActiveBubble] = useState<{
+    imageId: number;
+    criterionId: string;
+    value: number;
+  } | null>(null);
 
   const handleSliderChange = (imageId: number, criterionId: string, value: number) => {
     setRatings(prev => ({
@@ -39,6 +46,11 @@ export default function BiodiversityAssessment() {
         [criterionId]: value
       }
     }));
+    setActiveBubble({ imageId, criterionId, value });
+  };
+
+  const handleSliderComplete = () => {
+    setActiveBubble(null);
   };
 
   const addUserPhoto = async () => {
@@ -74,33 +86,56 @@ export default function BiodiversityAssessment() {
       {images.map(image => (
         <View key={image.id} style={styles.imageBox}>
           <Image source={image.src} style={styles.image} resizeMode="cover" />
-          {criteria.map(criterion => (
-            <View key={criterion.id} style={styles.criterionBox}>
-              <Text style={styles.label}>{criterion.label}</Text>
-              <Slider
-                style={styles.slider}
-                minimumValue={1}
-                maximumValue={5}
-                step={1}
-                minimumTrackTintColor="green"
-                maximumTrackTintColor="red"
-                value={ratings?.[image.id]?.[criterion.id] || 3}
-                onValueChange={(value) => handleSliderChange(image.id, criterion.id, value)}
-              />
-              <View style={styles.sliderLabels}>
-                <Text style={styles.min}>1</Text>
-                <Text style={styles.max}>5</Text>
+          {criteria.map(criterion => {
+            const value = ratings?.[image.id]?.[criterion.id] || 3;
+            const showBubble =
+              activeBubble &&
+              activeBubble.imageId === image.id &&
+              activeBubble.criterionId === criterion.id;
+            return (
+              <View key={criterion.id} style={styles.criterionBox}>
+                <Text style={styles.label}>{criterion.label}</Text>
+                <View style={{ alignItems: 'center', width: '100%' }}>
+                  {showBubble && (
+                    <View
+                      style={[
+                        styles.bubble,
+                        {
+                          left: `${((activeBubble.value - 1) / 4) * 100}%`,
+                          transform: [{ translateX: -30 }],
+                        },
+                      ]}
+                    >
+                      <Text style={styles.bubbleText}>
+                        {valueLabels[activeBubble.value - 1]}
+                      </Text>
+                    </View>
+                  )}
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={1}
+                    maximumValue={5}
+                    step={1}
+                    minimumTrackTintColor="green"
+                    maximumTrackTintColor="red"
+                    value={value}
+                    onValueChange={(val) => handleSliderChange(image.id, criterion.id, val)}
+                    onSlidingComplete={handleSliderComplete}
+                  />
+                  <View style={styles.sliderLabels}>
+                    <Text style={styles.min}>1</Text>
+                    <Text style={styles.max}>5</Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          ))}
+            );
+          })}
         </View>
       ))}
       <Button title="Validate & Export JSON" onPress={exportResults} />
     </ScrollView>
   );
 }
-
-// ...styles unchanged...
 
 const styles = StyleSheet.create({
   container: {
@@ -149,5 +184,21 @@ const styles = StyleSheet.create({
   },
   max: {
     color: 'red'
-  }
+  },
+  bubble: {
+    position: 'absolute',
+    top: -30,
+    backgroundColor: '#333',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+    zIndex: 2,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  bubbleText: {
+    color: '#fff',
+    fontSize: 12,
+    textAlign: 'center',
+  },
 });
