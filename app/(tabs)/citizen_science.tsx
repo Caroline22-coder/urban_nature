@@ -95,7 +95,7 @@ export default function BiodiversityAssessment() {
             return (
               <View key={criterion.id} style={styles.criterionBox}>
                 <Text style={styles.label}>{criterion.label}</Text>
-                <View style={{ alignItems: 'center', width: '100%' }}>
+                <View style={styles.sliderContainer}>
                   {showBubble && (
                     <View
                       style={[
@@ -171,13 +171,21 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 5
   },
+  sliderContainer: {
+    width: '100%',
+    alignItems: 'stretch',
+    position: 'relative',
+    marginBottom: 10,
+  },
   slider: {
     width: '100%',
     height: 40
   },
   sliderLabels: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: -10,
   },
   min: {
     color: 'darkgreen'
