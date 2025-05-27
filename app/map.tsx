@@ -54,7 +54,7 @@ const MyMapApp = () => {
         <Marker
           coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
           title="Custom Marker"
-          description="This is a custom marker with a callout"
+          description="This is a custom marker"
           pinColor="blue"
         />
         

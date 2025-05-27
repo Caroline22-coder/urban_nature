@@ -98,7 +98,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.209.226:5000/analyze", {
+      const response = await fetch("http://192.168.199.226:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
