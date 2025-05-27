@@ -4,6 +4,7 @@ import Slider from '@react-native-community/slider';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 
 interface Rating {
   [criterionId: string]: number;
@@ -14,6 +15,7 @@ interface ImageData {
   src: any;
   alt: string;
   isUser?: boolean;
+  location?: { latitude: number; longitude: number };
 }
 
 const defaultImages: ImageData[] = [
@@ -54,15 +56,44 @@ export default function BiodiversityAssessment() {
   };
 
   const addUserPhoto = async () => {
+    // Request permissions
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+
+    if (cameraStatus !== 'granted' || locationStatus !== 'granted') {
+      Alert.alert('Permission denied', 'Camera and location permissions are required.');
+      return;
+    }
+
+    // Take photo
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
+
     if (!result.canceled && result.assets && result.assets.length > 0) {
+      // Get current location
+      let loc = null;
+      try {
+        loc = await Location.getCurrentPositionAsync({});
+      } catch (e) {
+        Alert.alert('Location error', 'Could not get location.');
+      }
       const newId = images.length ? Math.max(...images.map(img => img.id)) + 1 : 1;
       setImages(prev => [
         ...prev,
-        { id: newId, src: { uri: result.assets[0].uri }, alt: 'User photo', isUser: true }
+        {
+          id: newId,
+          src: { uri: result.assets[0].uri },
+          alt: 'User photo',
+          isUser: true,
+          location: loc
+            ? {
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude,
+              }
+            : undefined,
+        }
       ]);
     }
   };
@@ -70,7 +101,16 @@ export default function BiodiversityAssessment() {
   const exportResults = async () => {
     const resultArray = images.map(image => ({
       imageId: image.id,
-      ratings: ratings[image.id] || {}
+      image: image.isUser ? image.src.uri : image.alt,
+      location: image.location ? {
+        latitude: image.location.latitude,
+        longitude: image.location.longitude
+      } : null,
+      ratings: {
+        richness: ratings[image.id]?.richness ?? null,
+        naturalness: ratings[image.id]?.naturalness ?? null,
+        humanImpact: ratings[image.id]?.humanImpact ?? null,
+      }
     }));
 
     const json = JSON.stringify(resultArray, null, 2);
@@ -86,6 +126,11 @@ export default function BiodiversityAssessment() {
       {images.map(image => (
         <View key={image.id} style={styles.imageBox}>
           <Image source={image.src} style={styles.image} resizeMode="cover" />
+          {image.location && (
+            <Text style={{ fontSize: 12, color: '#555', marginBottom: 4 }}>
+              Lat: {image.location.latitude.toFixed(5)}, Lon: {image.location.longitude.toFixed(5)}
+            </Text>
+          )}
           {criteria.map(criterion => {
             const value = ratings?.[image.id]?.[criterion.id] || 3;
             const showBubble =
