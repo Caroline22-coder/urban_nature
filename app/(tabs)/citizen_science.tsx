@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     position: 'relative',
     marginBottom: 10,
+    overflow: 'visible', 
   },
   slider: {
     width: '100%',
