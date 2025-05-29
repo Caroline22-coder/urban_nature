@@ -53,15 +53,15 @@ const _Layout = () => {
             }}
             >
             <Tabs.Screen
-            name= "index"
+            name= "map"
             options= {{
-                title: 'Home', 
+                title: 'Map', 
                 headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     <TabIcon 
                     focused={focused}
                     icon={icons.home}
-                    title="Home" 
+                    title="Map" 
                     /> 
 
                 )
