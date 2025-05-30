@@ -5,7 +5,7 @@ import {SpeciesAnalysisProvider} from "./speciesAnalysis";
 export default function RootLayout() {
   return (
   <SpeciesAnalysisProvider>
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
       name="index"
       options={{ headerShown: false }}

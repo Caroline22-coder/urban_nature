@@ -30,7 +30,7 @@ export default function Step1() {
   );
 }
 
-export const defaultOptions = { headerShown: false };
+
 
 const styles = StyleSheet.create({
   container: {

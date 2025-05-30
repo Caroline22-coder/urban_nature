@@ -35,7 +35,7 @@ export default function Step2() {
   );
 }
 
-export const defaultOptions = { headerShown: false };
+
 
 const styles = StyleSheet.create({
   container: {
