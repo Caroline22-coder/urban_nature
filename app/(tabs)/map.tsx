@@ -1,80 +1,83 @@
-import { Image, Text, View, ScrollView, ActivityIndicator, FlatList } from "react-native";
-import {images} from "@/constants/images";
-import {icons} from "@/constants/icons";
-import SearchBar from "@/components/SearchBar";
-import {useRouter} from "expo-router";
-import useFetch from "@/services/useFetch";
-import {fetchTrees} from "@/services/api";
-import TreeCard from "@/components/TreeCard";
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import * as Location from 'expo-location';
+import { useSpeciesAnalysis } from './speciesAnalysis';
 
+const MyMapApp = () => {
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { analyses } = useSpeciesAnalysis();
 
+  useEffect(() => {
+    (async () => {
+      let location = await Location.getCurrentPositionAsync({});
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setLoading(false);
+    })();
+  }, []);
 
-export default function Index() {
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
-  const router= useRouter(); 
-
-  const{
-    data : trees, 
-    loading: treesLoading,
-    error: treesError
-  } = useFetch( () => fetchTrees({
-    query: ''}
-  )) 
+  if (!userLocation) {
+    return (
+      <View style={styles.center}>
+        <MapView style={styles.map} />
+      </View>
+    );
+  }
 
   return (
-    <View className="flex-1 bg-primary"> 
-          <Image source={images.bg} className="absolute w-full z-0" /> 
-          <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false} contentContainerStyle={{minHeight: "100%", paddingBottom: 10}} >
-            <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" /> 
-                {treesLoading ? (
-                  <ActivityIndicator
-                    size="large"
-                    color="#0000ff"
-                    className="mt-10 self-center"
-
-                  />
-                ) : treesError ? (
-                  <Text> Error: {treesError?.message} </Text>
-                ) : ( 
-                <View className="flex-1 mt-5">
-                    <SearchBar 
-                          onPress={() => router.push("/search")}
-                          placeholder= "Search for a tree"
-                    /> 
-
-                  <> 
-                  <Text className= "test-lg text-white font-bold mt-5 mb-3"> Tree Species </Text>
-                  
-                  <FlatList
-
-                    data={trees}
-                    renderItem={({item}) => (
-                      <TreeCard
-                            id={item.id}
-                            name={item.name}
-                            scientific_name={item.scientific_name}
-                            image_url={item.image_url}
-                      /> 
-                    )}
-                    keyExtractor={(item) => item.id.toString()}
-                    numColumns={3}
-                    columnWrapperStyle={{
-                      justifyContent: 'flex-start',
-                      gap:20,
-                      paddingRight: 5,
-                      marginBottom:10 
-                    }}
-
-                    className="mt-2 pb-32"
-                    scrollEnabled={true}
-                    
-                  /> 
-
-                  </>
-                </View>
-                )}
-
-          </ScrollView>
+    <View style={styles.container}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      >
+    
+        {/* Analysed species markers */}
+        {analyses.map((item) => (
+          <Marker
+            key={item.id}
+            coordinate={item.location}
+            title={item.analysis.common_name}
+            description={item.analysis.scientific_name}
+            pinColor="blue"
+          >
+           
+          </Marker>
+        ))}
+      </MapView>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default MyMapApp;
