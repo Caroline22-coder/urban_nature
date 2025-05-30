@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
-import { useSpeciesAnalysis } from "../speciesAnalysis";
+import { useSpeciesAnalysis } from "./speciesAnalysis";
 
 export default function App() {
   const router = useRouter();

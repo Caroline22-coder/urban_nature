@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { useSpeciesAnalysis } from './speciesAnalysis';
+import { useSpeciesAnalysis } from './(tabs)/speciesAnalysis';
 
 const MyMapApp = () => {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
