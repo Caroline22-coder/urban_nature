@@ -14,7 +14,7 @@ export default function Home() {
     >
       <View style={styles.container}>
         <Pressable style={styles.button} onPress={() => router.replace("/map")}>
-          <Text style={styles.buttonText}>VIEW OUR MAP</Text>
+          <Text style={styles.buttonText}>VIEW MAP</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={() => router.replace("/picture")}>
           <Text style={styles.buttonText}>EXPLORE</Text>
