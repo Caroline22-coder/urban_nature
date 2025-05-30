@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, StyleSheet, Dimensions } from "react-native";
+import { View, Text, ImageBackground, Pressable, StyleSheet, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
@@ -7,32 +7,36 @@ export default function Welcome() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/butterfly.jpg")}
-        style={styles.butterfly}
-        resizeMode="contain"
-      />
-      <Text style={styles.title}>EXPLORE URBAN NATURE</Text>
-      <Pressable style={styles.button} onPress={() => router.replace("/(tabs)/map")}>
-        <Text style={styles.buttonText}>Start now</Text>
-      </Pressable>
-    </View>
+    <ImageBackground
+      source={require("../assets/images/butterfly.jpg")}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>EXPLORE URBAN NATURE</Text>
+        <Pressable style={styles.button} onPress={() => router.replace("/(tabs)/map")}>
+          <Text style={styles.buttonText}>Start now</Text>
+        </Pressable>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: "#0e3d3b", // or use an ImageBackground for a blurred effect
+    width: width,
+    height: height,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  overlay: {
+    flex: 1,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "rgba(14,61,59,0.25)", // Optional: dark overlay for readability
     padding: 24,
-  },
-  butterfly: {
-    width: width * 0.5,
-    height: height * 0.3,
-    marginBottom: 40,
   },
   title: {
     color: "#fff",
