@@ -19,7 +19,7 @@ export default function Step1() {
         Take pictures of flowers or trees around your city. Add them to our digital map. This will be of great value for our research community.
       </Text>
       <Image
-        source={require("../../assets/images/explore.svg")}
+        source={require("../../assets/images/explore.png")}
         style={styles.illustration}
         resizeMode="contain"
       />
@@ -30,7 +30,8 @@ export default function Step1() {
   );
 }
 
-export const options = {headerShown: false};
+export const defaultOptions = { headerShown: false };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
     paddingHorizontal: 8,
+    fontWeight: "500",
   },
   illustration: {
     width: width * 0.6,

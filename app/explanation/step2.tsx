@@ -1,6 +1,5 @@
-import { View, Text, Pressable, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Image, Pressable, StyleSheet, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
-import CitizenSvg from '../../assets/images/citizen.svg';
 
 const { width } = Dimensions.get("window");
 
@@ -13,15 +12,19 @@ export default function Step2() {
       <View style={styles.progressContainer}>
         <View style={[styles.progressDot, styles.activeDot]} />
         <View style={[styles.progressDot, styles.activeDot]} />
-        <View style={[styles.progressDot, styles.activeDot]} />
+        <View style={styles.progressDot} />
       </View>
       <Text style={styles.title}>BECOME A CITIZEN SCIENTIST</Text>
       <Text style={styles.description}>
-        Take pictures of some places in your city and rate the biodiversity in those areas.
+        Take pictures of some places in your city and{"\n"}rate the biodiversity in those areas.
       </Text>
-      <CitizenSvg width={width * 0.6} height={width * 0.6} style={{ marginBottom: 30 }} />
+      <Image
+        source={require("../../assets/images/citizen.png")}
+        style={styles.illustration}
+        resizeMode="contain"
+      />
       <View style={styles.buttonRow}>
-        <Pressable style={styles.secondaryButton} onPress={() => router.back()}>
+        <Pressable style={styles.secondaryButton} onPress={() => router.replace("/explanation/step1")}>
           <Text style={styles.secondaryButtonText}>Previous</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={() => router.replace("/explanation/step3")}>
@@ -61,8 +64,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#6fd1c2",
   },
   title: {
-    fontSize: 22,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "400",
     marginBottom: 18,
     textAlign: "center",
     color: "#222",
@@ -73,6 +76,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
     paddingHorizontal: 8,
+    fontWeight: "500",
+  },
+  illustration: {
+    width: width * 0.6,
+    height: width * 0.6,
+    marginBottom: 30,
   },
   buttonRow: {
     flexDirection: "row",

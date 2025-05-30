@@ -14,7 +14,7 @@ export default function Welcome() {
     >
       <View style={styles.overlay}>
         <Text style={styles.title}>EXPLORE URBAN NATURE</Text>
-        <Pressable style={styles.button} onPress={() => router.replace("/(tabs)/map")}>
+        <Pressable style={styles.button} onPress={() => router.replace("/explanation/step1")}>
           <Text style={styles.buttonText}>Start now</Text>
         </Pressable>
       </View>
