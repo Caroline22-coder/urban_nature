@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     letterSpacing: 1,
-    marginBottom: 80,
+    marginTop: 120,
+    marginBottom: 10,
     textAlign: "center",
   },
   button: {
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
   },
   buttonText: {
-    color: "#222",
+    color: "#194038",
     fontSize: 18,
     fontWeight: "500",
   },
