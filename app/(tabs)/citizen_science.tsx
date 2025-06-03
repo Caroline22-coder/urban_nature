@@ -18,10 +18,8 @@ interface ImageData {
   location?: { latitude: number; longitude: number };
 }
 
-const defaultImages: ImageData[] = [
-  { id: 1, src: require('../../assets/images/biodiversity1.jpg'), alt: 'Scene 1' },
-  { id: 2, src: require('../../assets/images/biodiversity2.jpg'), alt: 'Scene 2' }
-];
+// No default images; user must add their own
+const defaultImages: ImageData[] = [];
 
 const criteria = [
   { id: 'richness', label: 'Species richness' },
