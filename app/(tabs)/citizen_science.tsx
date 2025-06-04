@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Button, ScrollView, StyleSheet, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
+import * as AuthSession from 'expo-auth-session';
 
 interface Rating {
   [criterionId: string]: number;
@@ -18,7 +17,6 @@ interface ImageData {
   location?: { latitude: number; longitude: number };
 }
 
-// No default images; user must add their own
 const defaultImages: ImageData[] = [];
 
 const criteria = [
@@ -29,6 +27,9 @@ const criteria = [
 
 const valueLabels = ["Very low", "Low", "Medium", "High", "Very high"];
 
+const ARCGIS_FEATURE_SERVICE_URL = 'https://services-eu1.arcgis.com/d6WajiXkixlJUEtR/arcgis/rest/services/observations_biodiversity/FeatureServer/0/addFeatures';
+const ARCGIS_CLIENT_ID = '3FmlXIe1Vyf8fSLh'; // <-- Replace with your Client ID
+
 export default function BiodiversityAssessment() {
   const [ratings, setRatings] = useState<Record<number, Rating>>({});
   const [images, setImages] = useState<ImageData[]>(defaultImages);
@@ -37,6 +38,26 @@ export default function BiodiversityAssessment() {
     criterionId: string;
     value: number;
   } | null>(null);
+  const [arcgisToken, setArcgisToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const redirectUri = AuthSession.makeRedirectUri();
+    console.log('Redirect URI:', redirectUri);
+  }, []);
+
+  // OAuth2 login function
+  const loginWithArcGIS = async () => {
+    const redirectUri = AuthSession.makeRedirectUri();
+    const authUrl = `https://www.arcgis.com/sharing/rest/oauth2/authorize?client_id=${ARCGIS_CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const result = await AuthSession.startAsync({ authUrl });
+    if (result.type === 'success' && result.params.access_token) {
+      setArcgisToken(result.params.access_token);
+      console.log('ArcGIS Token:', result.params.access_token); // <-- Print token for browser test
+      Alert.alert('Login Success', 'You are now authenticated with ArcGIS!');
+    } else {
+      Alert.alert('Login Failed', 'Could not authenticate with ArcGIS.');
+    }
+  };
 
   const handleSliderChange = (imageId: number, criterionId: string, value: number) => {
     setRatings(prev => ({
@@ -54,7 +75,6 @@ export default function BiodiversityAssessment() {
   };
 
   const addUserPhoto = async () => {
-    // Request permissions
     const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
     const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
 
@@ -63,14 +83,12 @@ export default function BiodiversityAssessment() {
       return;
     }
 
-    // Take photo
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
-      // Get current location
       let loc = null;
       try {
         loc = await Location.getCurrentPositionAsync({});
@@ -96,31 +114,67 @@ export default function BiodiversityAssessment() {
     }
   };
 
-  const exportResults = async () => {
-    const resultArray = images.map(image => ({
-      imageId: image.id,
-      image: image.isUser ? image.src.uri : image.alt,
-      location: image.location ? {
-        latitude: image.location.latitude,
-        longitude: image.location.longitude
-      } : null,
-      ratings: {
-        richness: ratings[image.id]?.richness ?? null,
-        naturalness: ratings[image.id]?.naturalness ?? null,
-        humanImpact: ratings[image.id]?.humanImpact ?? null,
-      }
-    }));
+  const uploadToArcGIS = async () => {
+    if (!arcgisToken) {
+      Alert.alert('Not authenticated', 'Please log in to ArcGIS first.');
+      return;
+    }
+    if (images.length === 0) {
+      Alert.alert('No photo', 'Please add a photo before uploading.');
+      return;
+    }
 
-    const json = JSON.stringify(resultArray, null, 2);
-    const fileUri = FileSystem.documentDirectory + 'biodiversity_results.json';
-    await FileSystem.writeAsStringAsync(fileUri, json);
-    await Sharing.shareAsync(fileUri);
+    for (const image of images) {
+      const attributes = {
+        perceived_naturalness: ratings[image.id]?.naturalness ?? null,
+        human_impact: ratings[image.id]?.humanImpact ?? null,
+        species_richness: ratings[image.id]?.richness ?? null,
+      };
+
+      const geometry = image.location
+        ? {
+            x: image.location.longitude,
+            y: image.location.latitude,
+            spatialReference: { wkid: 4326 }
+          }
+        : undefined;
+
+      const feature = geometry
+        ? { attributes, geometry }
+        : { attributes };
+
+      try {
+        const response = await fetch(
+          `${ARCGIS_FEATURE_SERVICE_URL}?f=json&token=${arcgisToken}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ features: [feature] })
+          }
+        );
+        const result = await response.json();
+        if (result.addResults && result.addResults[0].success) {
+          Alert.alert('Success', 'Data uploaded to ArcGIS!');
+        } else {
+          Alert.alert('Upload failed', JSON.stringify(result));
+        }
+      } catch (e) {
+        Alert.alert('Error', 'Failed to upload to ArcGIS.');
+      }
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Biodiversity Perception Assessment</Text>
+      <Button title="Login to ArcGIS" onPress={loginWithArcGIS} />
       <Button title="Add Photo from Camera" onPress={addUserPhoto} />
+
+      <View style={{ marginVertical: 10, backgroundColor: '#eee', padding: 8, borderRadius: 6 }}>
+        <Text style={{ fontWeight: 'bold' }}>OAuth2 Redirect URI:</Text>
+        <Text selectable style={{ fontSize: 12 }}>{AuthSession.makeRedirectUri()}</Text>
+      </View>
+
       {images.map(image => (
         <View key={image.id} style={styles.imageBox}>
           <Image source={image.src} style={styles.image} resizeMode="cover" />
@@ -175,7 +229,7 @@ export default function BiodiversityAssessment() {
           })}
         </View>
       ))}
-      <Button title="Validate & Export JSON" onPress={exportResults} />
+      <Button title="Upload to ArcGIS" onPress={uploadToArcGIS} />
     </ScrollView>
   );
 }
