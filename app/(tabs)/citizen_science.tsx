@@ -45,11 +45,13 @@ export default function BiodiversityAssessment() {
     console.log('Redirect URI:', redirectUri);
   }, []);
 
-  // OAuth2 login function
+  // OAuth2 login function with console log
   const loginWithArcGIS = async () => {
+    console.log('Login button pressed'); // <-- Added log
     const redirectUri = AuthSession.makeRedirectUri();
     const authUrl = `https://www.arcgis.com/sharing/rest/oauth2/authorize?client_id=${ARCGIS_CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}`;
     const result = await AuthSession.startAsync({ authUrl });
+    console.log('AuthSession result:', result); // <-- Added log
     if (result.type === 'success' && result.params.access_token) {
       setArcgisToken(result.params.access_token);
       console.log('ArcGIS Token:', result.params.access_token); // <-- Print token for browser test
