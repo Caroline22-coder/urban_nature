@@ -16,7 +16,11 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.mobile_tree_app"
+      "package": "com.anonymous.mobiletreeapp",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +37,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ], [
+      ],
+      [
         "expo-camera",
         {
           "cameraPermission": "Allow TreeExplorer to access your camera",
@@ -46,7 +51,13 @@
       "typedRoutes": true
     },
     "extra": {
-      "TREFLE_API_KEY": "vCXGS-3CTvuiKDbgp6sr6asl_TP--Foj1L5Sy2np92E"
+      "TREFLE_API_KEY": "vCXGS-3CTvuiKDbgp6sr6asl_TP--Foj1L5Sy2np92E",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cebfaacb-d603-4060-a3c5-6e53a5fd4ce0"
+      }
     }
   }
 }
