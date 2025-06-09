@@ -14,16 +14,16 @@ const MODELS = [
   },
   {
     name: 'Meadow',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/meadow.glb',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/meadow.glb',
 
   },
   {
     name: 'Mix planting',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/mix_planting.glb',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_planting.glb',
   },
   {
     name: 'Mix trees row',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/mix_trees_row.glb',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_trees_row.glb',
   },
   {
     name: 'Clover',
