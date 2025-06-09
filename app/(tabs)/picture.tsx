@@ -8,6 +8,46 @@ import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
 
+// Airtable config
+const AIRTABLE_API_KEY = 'pat9FyclWkjz8eAAy.e873e9588930509dc253d25fa15283a838535486d848f44bfa4de23312f87571';
+const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
+const AIRTABLE_TABLE_NAME = 'Species Observations'; // Use your actual table name
+
+const uploadToAirtable = async (data: any) => {
+  try {
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fields: {
+            common_name: data.analysis.common_name,
+            scientific_name: data.analysis.scientific_name,
+            family: data.analysis.family,
+            genus: data.analysis.genus,
+            score: data.analysis.score,
+            latitude: data.location.latitude,
+            longitude: data.location.longitude,
+          }
+        }),
+      }
+    );
+    const result = await response.json();
+    if (result.id) {
+      Alert.alert('Success', 'Data uploaded to Airtable!');
+    } else {
+      Alert.alert('Upload failed', JSON.stringify(result));
+    }
+  } catch (e) {
+    Alert.alert('Error', 'Failed to upload to Airtable.');
+    console.error('Airtable upload error:', e);
+  }
+};
+
 export default function App() {
   const router = useRouter();
   const [uri, setUri] = useState<string | null>(null);
@@ -54,7 +94,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.244.177:5000/analyze", {
+      const response = await fetch("http://192.168.38.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -66,13 +106,15 @@ export default function App() {
       setAnalysisResult(data);
 
       if (!data.error && location && uri) {
-        addAnalysis({
+        const analysisData = {
           id: Date.now().toString(),
           imageUri: uri,
           analysis: data,
           location,
           timestamp: new Date().toISOString(),
-        });
+        };
+        addAnalysis(analysisData);
+        uploadToAirtable(analysisData); // Upload to Airtable
       }
 
       if (data.error) {

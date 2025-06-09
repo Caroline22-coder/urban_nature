@@ -10,7 +10,7 @@ export default function CitizenScienceSurvey() {
 
   return (
     <View style={styles.container}>
-      <Button title="Open ArcGIS Survey" onPress={openSurvey} />
+      <Button title="Score the biodiversity in your city" onPress={openSurvey} />
     </View>
   );
 }

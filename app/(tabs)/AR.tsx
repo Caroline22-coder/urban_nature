@@ -8,6 +8,24 @@ const MODELS = [
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/sunflower.glb',
   },
   {
+    name: 'Bushes',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/bushes.glb',
+
+  },
+  {
+    name: 'Meadow',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/meadow.glb',
+
+  },
+  {
+    name: 'Mix planting',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/mix_planting.glb',
+  },
+  {
+    name: 'Mix trees row',
+    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/mix_trees_row.glb',
+  },
+  {
     name: 'Clover',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/little_clover.glb',
   },
