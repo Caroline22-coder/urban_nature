@@ -1,7 +1,8 @@
 import React from 'react'
-import { View, Text, Button, Linking, Platform, Alert } from 'react-native'
+import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
-// Add your new model URLs here
 const MODELS = [
   {
     name: 'Sunflower',
@@ -10,12 +11,10 @@ const MODELS = [
   {
     name: 'Bushes',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/bushes.glb',
-
   },
   {
     name: 'Meadow',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/meadow.glb',
-
   },
   {
     name: 'Mix planting',
@@ -33,30 +32,34 @@ const MODELS = [
     name: 'Grass',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/grass.glb'
   }
-  // Add more models as needed
-]
+];
 
 const openSceneViewer = async (modelUrl: string) => {
   const sceneViewerUrl = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(
     modelUrl
-  )}&mode=ar_preferred`
+  )}&mode=ar_preferred`;
 
   if (Platform.OS === 'android') {
     try {
-      await Linking.openURL(sceneViewerUrl)
+      await Linking.openURL(sceneViewerUrl);
     } catch (error) {
-      Alert.alert('Error', 'Could not open AR Scene Viewer.')
+      Alert.alert('Error', 'Could not open AR Scene Viewer.');
     }
   } else {
-    Alert.alert('Not supported', 'Scene Viewer is only available on Android devices.')
+    Alert.alert('Not supported', 'Scene Viewer is only available on Android devices.');
   }
-}
+};
 
 const Saved = () => {
+  const router = useRouter();
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>View AR Models</Text>
-      {MODELS.map((model, idx) => (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
+        <Ionicons name="arrow-back" size={28} color="black" />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 20, marginBottom: 20, marginTop: 60 }}>View AR Models</Text>
+      {MODELS.map((model) => (
         <View key={model.name} style={{ marginVertical: 8, width: '80%' }}>
           <Button
             title={`Open ${model.name} in AR`}
@@ -65,7 +68,23 @@ const Saved = () => {
         </View>
       ))}
     </View>
-  )
-}
+  );
+};
 
-export default Saved
+export default Saved;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: 'transparent',
+  },
+});
