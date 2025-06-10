@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View, Alert } from "react-native";
+import { Button, StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -7,6 +7,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function App() {
@@ -150,6 +151,9 @@ const uploadToAirtable = async () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
+              <Ionicons name="arrow-back" size={28} color="black" />
+            </TouchableOpacity>
       {!uri ? (
         <Button title="Take a picture" onPress={takePicture} />
       ) : (
@@ -181,5 +185,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: 'transparent',
   },
 });
