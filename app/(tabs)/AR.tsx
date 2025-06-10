@@ -4,10 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 const MODELS = [
-  {
-    name: 'Sunflower',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/sunflower.glb',
-  },
+  
   {
     name: 'Bushes',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/bushes.glb',
@@ -23,14 +20,6 @@ const MODELS = [
   {
     name: 'Mix trees row',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_trees_row.glb',
-  },
-  {
-    name: 'Clover',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/little_clover.glb',
-  },
-  {
-    name: 'Grass',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/mobile_tree_app/main/assets/3Dmodels/grass.glb'
   }
 ];
 
