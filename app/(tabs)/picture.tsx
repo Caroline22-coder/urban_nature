@@ -8,12 +8,22 @@ import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
 
-// Airtable config
-const AIRTABLE_API_KEY = 'pat9FyclWkjz8eAAy.e873e9588930509dc253d25fa15283a838535486d848f44bfa4de23312f87571';
-const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
-const AIRTABLE_TABLE_NAME = 'Species Observations'; // Use your actual table name
 
-const uploadToAirtable = async (data: any) => {
+export default function App() {
+  const router = useRouter();
+  const [uri, setUri] = useState<string | null>(null);
+  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const { addAnalysis } = useSpeciesAnalysis();
+  const AIRTABLE_API_KEY = 'pat9V5291QvAKblsD.00cf099f8a8f1c60ddee3c302e77a61c6f4403cd4cb68338b1c2972ad894293f';
+const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
+const AIRTABLE_TABLE_NAME = 'Publications';
+
+const uploadToAirtable = async () => {
+  if (!analysisResult || !location) {
+    Alert.alert("Nothing to upload", "Please analyze a picture first.");
+    return;
+  }
   try {
     const response = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
@@ -25,13 +35,13 @@ const uploadToAirtable = async (data: any) => {
         },
         body: JSON.stringify({
           fields: {
-            common_name: data.analysis.common_name,
-            scientific_name: data.analysis.scientific_name,
-            family: data.analysis.family,
-            genus: data.analysis.genus,
-            score: data.analysis.score,
-            latitude: data.location.latitude,
-            longitude: data.location.longitude,
+            common_name: String(analysisResult.common_name),
+            scientific_name: String(analysisResult.scientific_name),
+            family: String(analysisResult.family),
+            genus: String(analysisResult.genus),
+            score: String(analysisResult.score),
+            latitude: String(location.latitude),
+            longitude: String(location.longitude),
           }
         }),
       }
@@ -47,13 +57,6 @@ const uploadToAirtable = async (data: any) => {
     console.error('Airtable upload error:', e);
   }
 };
-
-export default function App() {
-  const router = useRouter();
-  const [uri, setUri] = useState<string | null>(null);
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
-  const { addAnalysis } = useSpeciesAnalysis();
 
   const takePicture = async () => {
     const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
@@ -94,7 +97,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.38.177:5000/analyze", {
+      const response = await fetch("http://192.168.108.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -106,15 +109,13 @@ export default function App() {
       setAnalysisResult(data);
 
       if (!data.error && location && uri) {
-        const analysisData = {
+        addAnalysis({
           id: Date.now().toString(),
           imageUri: uri,
           analysis: data,
           location,
           timestamp: new Date().toISOString(),
-        };
-        addAnalysis(analysisData);
-        uploadToAirtable(analysisData); // Upload to Airtable
+        });
       }
 
       if (data.error) {
@@ -165,8 +166,8 @@ export default function App() {
           <Button onPress={() => setUri(null)} title="Take another picture" />
           <Button title="Analyse the species" onPress={analyzeSpecies} />
           {analysisResult && (
-            <Button title="Export to JSON" onPress={exportToJson} />
-          )}
+  <Button title="Upload to Airtable" onPress={uploadToAirtable} />
+)}
           <Button title="View on the map" onPress={() => router.push("/map")} />
         </View>
       )}
