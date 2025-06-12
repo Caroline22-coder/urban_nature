@@ -1,25 +1,34 @@
 import React from 'react'
-import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import Trending from "../../components/Trending";
 
-const MODELS = [
+const posts = [
   
   {
+    id: 1,
     name: 'Bushes',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/bushes.glb',
+    image: require('../../assets/images/Bushes.png'),
   },
   {
+    id: 2,
     name: 'Meadow',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/meadow.glb',
+    image: require('../../assets/images/Meadow.png'),
   },
   {
+    id: 3,
     name: 'Mix planting',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_planting.glb',
+    image: require('../../assets/images/MixPlanting.png'),
   },
   {
+    id: 4,
     name: 'Mix trees row',
     url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_trees_row.glb',
+    image: require('../../assets/images/MixTreesRow.png'),
   }
 ];
 
@@ -42,20 +51,19 @@ const openSceneViewer = async (modelUrl: string) => {
 const Saved = () => {
   const router = useRouter();
 
-  return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 20, marginBottom: 20, marginTop: 60 }}>View AR Models</Text>
-      {MODELS.map((model) => (
-        <View key={model.name} style={{ marginVertical: 8, width: '80%' }}>
-          <Button
-            title={`Open ${model.name} in AR`}
-            onPress={() => openSceneViewer(model.url)}
-          />
-        </View>
-      ))}
+  return(
+
+  
+    <View className="w-full flex-1 pt-5 pb-8">
+      <Text className="text-gray-100 text-lg font-pregular mb-3">AR Models</Text>
+      <Trending posts= {posts} />
+  
+
     </View>
-  );
-};
+  )
+  }
+
+  
 
 export default Saved;
 
