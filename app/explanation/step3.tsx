@@ -27,7 +27,7 @@ export default function Step3() {
         <Pressable style={styles.secondaryButton} onPress={() => router.replace("/explanation/step2")}>
           <Text style={styles.secondaryButtonText}>Previous</Text>
         </Pressable>
-        <Pressable style={styles.button} onPress={() => router.replace("/(tabs)/home")}>
+        <Pressable style={styles.button} onPress={() => router.replace("/(tabs)/AR")}>
           <Text style={styles.buttonText}>Next</Text>
         </Pressable>
       </View>

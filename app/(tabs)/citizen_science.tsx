@@ -13,9 +13,6 @@ export default function CitizenScienceSurvey() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
-        <Ionicons name="arrow-back" size={28} color="black" />
-      </TouchableOpacity>
       <Button title="Score the biodiversity in your city" onPress={openSurvey} />
     </View>
   );
@@ -27,12 +24,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
-    backgroundColor: 'transparent',
   },
 });

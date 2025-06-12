@@ -98,7 +98,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.211.177:5000/analyze", {
+      const response = await fetch("http://192.168.5.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -151,9 +151,6 @@ const uploadToAirtable = async () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
-              <Ionicons name="arrow-back" size={28} color="black" />
-            </TouchableOpacity>
       {!uri ? (
         <Button title="Take a picture" onPress={takePicture} />
       ) : (
@@ -185,12 +182,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
-    backgroundColor: 'transparent',
   },
 });

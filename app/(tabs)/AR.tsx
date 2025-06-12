@@ -44,9 +44,6 @@ const Saved = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
-        <Ionicons name="arrow-back" size={28} color="black" />
-      </TouchableOpacity>
       <Text style={{ fontSize: 20, marginBottom: 20, marginTop: 60 }}>View AR Models</Text>
       {MODELS.map((model) => (
         <View key={model.name} style={{ marginVertical: 8, width: '80%' }}>
