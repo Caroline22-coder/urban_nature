@@ -1,19 +1,14 @@
 import React from 'react';
-import { View, Button, StyleSheet, Linking, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
-const SURVEY_URL = 'https://arcg.is/1bnWjX0';
-
-export default function CitizenScienceSurvey() {
-  const router = useRouter();
-  const openSurvey = () => {
-    Linking.openURL(SURVEY_URL);
-  };
-
+export default function CitizenScienceWebView() {
   return (
     <View style={styles.container}>
-      <Button title="Score the biodiversity in your city" onPress={openSurvey} />
+      <WebView
+        source={{ uri: 'https://arcg.is/1bnWjX0'}}
+                        style={{ flex: 1 }}
+      />
     </View>
   );
 }
@@ -21,8 +16,5 @@ export default function CitizenScienceSurvey() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
   },
 });
