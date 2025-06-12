@@ -65,7 +65,7 @@ const _Layout = () => {
                     <TabIcon 
                     focused={focused}
                     icon={icons.home}
-                    title="Home" 
+                    title="AR" 
                     /> 
 
                 )
@@ -80,7 +80,7 @@ const _Layout = () => {
                     <TabIcon 
                     focused={focused}
                     icon={icons.save}
-                    title="Saved" 
+                    title="Map" 
                     /> 
 
                 ) 
@@ -96,7 +96,7 @@ const _Layout = () => {
                     <TabIcon 
                     focused={focused}
                     icon={icons.person}
-                    title="Profile" 
+                    title="Picture" 
                     /> 
 
                 )
@@ -112,7 +112,7 @@ const _Layout = () => {
                     <TabIcon 
                     focused={focused}
                     icon={icons.search}
-                    title="Search" 
+                    title="Citizen Science" 
                     /> 
 
                 )

@@ -8,7 +8,7 @@ export default function Welcome() {
 
   return (
     <ImageBackground
-      source={require("../assets/images/butterfly.jpg")}
+      source={require("../assets/images/dandelion.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
