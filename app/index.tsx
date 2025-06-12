@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "400",
     letterSpacing: 1,
-    marginTop: 120,
+    marginTop: 1,
     marginBottom: 10,
     textAlign: "center",
   },
