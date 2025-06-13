@@ -55,10 +55,12 @@ const Saved = () => {
   return (
     <View style={styles.container}>
       
-      <Text style={styles.title}>Explore AR Models</Text>
+      <Text style={styles.title}>Nature for</Text>
+      <Text style={styles.title}>Nature/You/Society</Text>
+      <Text style={styles.subsubtitle}>
+        Bring nature to life!</Text>
       <Text style={styles.subtitle}>
-        Tap a card to view a 3D model in Augmented Reality!
-      </Text>
+        Use AR to explore biodiversity-friendly designs right where you stand!</Text>
       <Trending posts={posts} />
     </View>
   );
@@ -80,12 +82,19 @@ const styles = StyleSheet.create({
     color: '#194038',
     marginBottom: 8,
     marginTop: 8,
-    textAlign: 'center',
+    textAlign: 'left',
+  },
+  subsubtitle: {
+    fontSize: 18,
+    color: '#357960',
+    marginBottom: 8,
+    textAlign: 'left',
+    fontStyle: 'italic',
   },
   subtitle: {
     fontSize: 16,
     color: '#194038',
     marginBottom: 24,
-    textAlign: 'center',
+    textAlign: 'left',
   },
 });
