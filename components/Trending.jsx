@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Linking, Platform, Alert } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 const zoomIn = {
@@ -12,10 +12,30 @@ const zoomOut = {
   1: { scale: 0.9 },
 };
 
+const openSceneViewer = async (modelUrl) => {
+  const sceneViewerUrl = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(
+    modelUrl
+  )}&mode=ar_preferred`;
+
+  if (Platform.OS === 'android') {
+    try {
+      await Linking.openURL(sceneViewerUrl);
+    } catch (error) {
+      Alert.alert('Error', 'Could not open AR Scene Viewer.');
+    }
+  } else {
+    Alert.alert('Not supported', 'Scene Viewer is only available on Android devices.');
+  }
+};
+
 const TrendingItem = ({ activeItem, item, onPress }) => (
   <TouchableOpacity
     activeOpacity={0.7}
-    onPress={() => onPress(item.id)}
+    onPress={() => {
+      onPress(item.id);
+      openSceneViewer(item.url);
+      
+    }}
     style={{ marginRight: 20 }}
   >
     <Animatable.View
