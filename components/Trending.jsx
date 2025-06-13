@@ -26,8 +26,8 @@ const TrendingItem = ({ activeItem, item, onPress }) => (
       <ImageBackground
         source={item.image}
         style={{
-          width: 120,
-          height: 120,
+          width: 220,
+          height: 420,
           borderRadius: 16,
           overflow: 'hidden',
         }}
