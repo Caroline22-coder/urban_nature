@@ -59,7 +59,7 @@ const TrendingItem = ({ activeItem, item, onPress }) => (
 );
 
 const Trending = ({ posts }) => {
-  const [activeItem, setActiveItem] = React.useState(posts[0]?.id);
+  const [activeItem, setActiveItem] = React.useState(posts[1]?.id);
 
   return (
     <FlatList
