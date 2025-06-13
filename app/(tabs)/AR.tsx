@@ -51,34 +51,40 @@ const openSceneViewer = async (modelUrl: string) => {
 const Saved = () => {
   const router = useRouter();
 
-  return(
-
-  
-    <View className="w-full flex-1 pt-5 pb-8">
-      <Text className="text-gray-100 text-lg font-pregular mb-3">AR Models</Text>
-      <Trending posts= {posts} />
-  
-
+  return (
+    <View style={styles.container}>
+      
+      <Text style={styles.title}>Explore AR Models</Text>
+      <Text style={styles.subtitle}>
+        Tap a card to view a 3D model in Augmented Reality!
+      </Text>
+      <Trending posts={posts} />
     </View>
-  )
-  }
-
-  
+  );
+};
 
 export default Saved;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    backgroundColor: "#f8f8e7",
     alignItems: 'center',
-    backgroundColor: '#fff',
+    paddingTop: 60,
+    paddingHorizontal: 16,
   },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
-    backgroundColor: 'transparent',
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#194038',
+    marginBottom: 8,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#194038',
+    marginBottom: 24,
+    textAlign: 'center',
   },
 });
