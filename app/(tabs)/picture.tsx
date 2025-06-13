@@ -7,6 +7,8 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
+import AWS from 'aws-sdk';
+import { ACCESS_KEY, SECRET_KEY } from '../../.env'; // Ensure you have your AWS credentials set up
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -17,15 +19,62 @@ export default function App() {
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const { addAnalysis } = useSpeciesAnalysis();
   const AIRTABLE_API_KEY = 'pat9V5291QvAKblsD.00cf099f8a8f1c60ddee3c302e77a61c6f4403cd4cb68338b1c2972ad894293f';
-const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
-const AIRTABLE_TABLE_NAME = 'Publications';
+  const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
+  const AIRTABLE_TABLE_NAME = 'Publications';
+  const S3_BUCKET = 'ucd-sdl-projects';
+  const REGION = 'eu-north-1';
+  
+
+AWS.config.update({
+  accessKeyId: ACCESS_KEY,
+  secretAccessKey: SECRET_KEY,
+  region: REGION,
+});
+
+const s3 = new AWS.S3();
+
+const uploadImageToS3 = async (uri: string, fileName: string): Promise<string | null> => {
+  try {
+    // Fetch the image as a blob
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    // Upload to S3
+   const params = {
+  Bucket: S3_BUCKET,
+  Key: `nbs-media/${fileName}`, // Uploads to the nbs-media folder
+  Body: blob,
+  ContentType: 'image/jpeg',
+};
+
+    const data = await s3.upload(params).promise();
+    return data.Location; // This is the public URL
+  } catch (error) {
+    Alert.alert('S3 Upload Error', error.message);
+    return null;
+  }
+};
+
+
+
+
 
 const uploadToAirtable = async () => {
-  if (!analysisResult || !location) {
+  if (!analysisResult || !location || !uri) {
     Alert.alert("Nothing to upload", "Please analyze a picture first.");
     return;
   }
   try {
+    // 1. Upload image to S3
+    const fileName = `analysis_${Date.now()}.jpg`;
+    const image_url = await uploadImageToS3(uri, fileName);
+
+    if (!image_url) {
+      Alert.alert('Error', 'Failed to upload image to S3.');
+      return;
+    }
+
+    // 2. Upload data to Airtable, including imageUrl
     const response = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
       {
@@ -43,6 +92,7 @@ const uploadToAirtable = async () => {
             score: String(analysisResult.score),
             latitude: String(location.latitude),
             longitude: String(location.longitude),
+            image_url: image_url, // Add the S3 image URL here
           }
         }),
       }
@@ -98,7 +148,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.5.177:5000/analyze", {
+      const response = await fetch("http://192.168.92.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
