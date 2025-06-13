@@ -68,7 +68,7 @@ export default Saved;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8e7",
+    backgroundColor: "#e6f4ea",
     alignItems: 'center',
     paddingTop: 60,
     paddingHorizontal: 16,
