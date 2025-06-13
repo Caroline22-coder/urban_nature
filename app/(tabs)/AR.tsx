@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#e6f4ea",
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingTop: 60,
     paddingHorizontal: 16,
   },
