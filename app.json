@@ -52,6 +52,8 @@
     },
     "extra": {
       "TREFLE_API_KEY": "vCXGS-3CTvuiKDbgp6sr6asl_TP--Foj1L5Sy2np92E",
+      "ACCESS_KEY": "AKIASVQKH6O55GUKSEJA",
+      "SECRET_KEY": "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",
       "router": {
         "origin": false
       },

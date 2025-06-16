@@ -8,7 +8,9 @@ import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
 import AWS from 'aws-sdk';
-import { ACCESS_KEY, SECRET_KEY } from '../../.env'; // Ensure you have your AWS credentials set up
+
+import Constants from 'expo-constants';
+
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -23,6 +25,8 @@ export default function App() {
   const AIRTABLE_TABLE_NAME = 'Publications';
   const S3_BUCKET = 'ucd-sdl-projects';
   const REGION = 'eu-north-1';
+  const ACCESS_KEY = Constants.expoConfig?.extra?.ACCESS_KEY;
+  const SECRET_KEY = Constants.expoConfig?.extra?.SECRET_KEY;
   
 
 AWS.config.update({
