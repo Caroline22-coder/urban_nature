@@ -111,7 +111,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.141.177:5000/analyze", {
+      const response = await fetch("http://192.168.215.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
