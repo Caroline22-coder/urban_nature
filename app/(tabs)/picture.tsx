@@ -175,7 +175,9 @@ const uploadToAirtable = async () => {
     >
     <View style={styles.container}>
       {!uri ? (
-        <Button title="Take a picture" onPress={takePicture} />
+        <TouchableOpacity onPress={takePicture} activeOpacity={0.6}>
+  <Text style={styles.text}>Click here to take a picture of a tree or a flower!</Text>
+</TouchableOpacity>
       ) : (
         <View>
           <Image
@@ -215,5 +217,16 @@ const styles = StyleSheet.create({
     height: height,
     justifyContent: "center",
     alignItems: "center",
+  },
+   text: {
+    color: 'white',
+    fontSize: 24,
+    lineHeight: 34,
+    textAlign: 'center',
+    backgroundColor: '#000000c0',
+    borderRadius: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    overflow: 'hidden',
   },
 });
