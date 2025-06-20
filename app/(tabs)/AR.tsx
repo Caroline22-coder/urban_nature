@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity, ImageBackground, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import Trending from "../../components/Trending";
@@ -61,6 +61,11 @@ const Saved = () => {
   const router = useRouter();
 
   return (
+    <ImageBackground
+  source={require('../../assets/images/Background 1.png')}
+  style={styles.container}
+  resizeMode="cover"
+>
     <View style={styles.container}>
       
       <Text style={styles.title}>Nature for</Text>
@@ -80,6 +85,7 @@ const Saved = () => {
         </TouchableOpacity>
       </View>
     </View>
+   </ImageBackground> 
   );
 };
 
@@ -88,7 +94,6 @@ export default Saved;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e6f4ea",
     alignItems: 'flex-start',
     paddingTop: 20,
     paddingHorizontal: 16,
