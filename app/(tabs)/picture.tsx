@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 34,
     textAlign: 'center',
-    backgroundColor: '#000000c0',
+    backgroundColor: '#00000060',
     borderRadius: 12,
     paddingHorizontal: 24,
     paddingVertical: 8,
