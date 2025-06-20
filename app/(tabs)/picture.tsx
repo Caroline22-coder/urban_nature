@@ -7,6 +7,8 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 
 import Constants from 'expo-constants';
@@ -164,6 +166,8 @@ const uploadToAirtable = async () => {
 
   const localImage = require('../../assets/images/identify.jpg');
   return (
+    <SafeAreaProvider>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
     <ImageBackground
       source={localImage}
       style={styles.background}
@@ -193,6 +197,8 @@ const uploadToAirtable = async () => {
       )}
     </View>
      </ImageBackground>
+     </SafeAreaView>
+  </SafeAreaProvider>
 
   );
 }
@@ -200,7 +206,6 @@ const uploadToAirtable = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
