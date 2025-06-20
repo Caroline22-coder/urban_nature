@@ -112,7 +112,7 @@ const _Layout = () => {
                     <TabIcon 
                     focused={focused}
                     icon={icons.search}
-                    title="Citizen Science" 
+                    title="Score" 
                     /> 
 
                 )
