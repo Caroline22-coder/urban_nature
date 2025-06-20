@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View, Alert, TouchableOpacity, ImageBackground } from "react-native";
+import { Button, StyleSheet, Text, View, Alert, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -12,7 +12,7 @@ import { useSpeciesAnalysis } from "./speciesAnalysis";
 import Constants from 'expo-constants';
 
 import { Ionicons } from '@expo/vector-icons';
-
+const { width, height } = Dimensions.get("window");
 
 export default function App() {
   const router = useRouter();
@@ -162,9 +162,10 @@ const uploadToAirtable = async () => {
     await Sharing.shareAsync(fileUri);
   };
 
+  const localImage = require('../../assets/images/identify.jpg');
   return (
     <ImageBackground
-      source={require('../../assets/images/identify.jpg')}
+      source={localImage}
       style={styles.background}
       resizeMode="cover"
     >
@@ -205,7 +206,9 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
