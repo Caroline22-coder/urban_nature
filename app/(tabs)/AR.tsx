@@ -49,6 +49,14 @@ const openSceneViewer = async (modelUrl: string) => {
   }
 };
 
+const openLink1 = () => {
+    Linking.openURL('https://survey123.arcgis.com/share/a74d56b672024af38d42cfea630305b3');
+  };
+
+  const openLink2 = () => {
+    Linking.openURL('https://arcg.is/0ffzv52');
+  };
+
 const Saved = () => {
   const router = useRouter();
 
@@ -62,6 +70,15 @@ const Saved = () => {
       <Text style={styles.subtitle}>
         Use AR to explore biodiversity-friendly designs right where you stand!</Text>
       <Trending posts={posts} />
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={openLink1}>
+          <Text style={styles.buttonText}>Submit your AR design!</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={openLink2}>
+          <Text style={styles.buttonText}>Rate our app</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -73,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#e6f4ea",
     alignItems: 'flex-start',
-    paddingTop: 60,
+    paddingTop: 20,
     paddingHorizontal: 16,
   },
   title: {
@@ -96,5 +113,27 @@ const styles = StyleSheet.create({
     color: '#194038',
     marginBottom: 24,
     textAlign: 'left',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 100, // Adjust to sit above the tab bar
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 20,
+    zIndex: 10,
+  },
+  button: {
+    backgroundColor: '#2d2d2d',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    elevation: 2,
+    marginHorizontal: 4, // Add this line for spacing between buttons
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
