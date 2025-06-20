@@ -164,7 +164,7 @@ const uploadToAirtable = async () => {
     await Sharing.shareAsync(fileUri);
   };
 
-  const localImage = require('../../assets/images/identify.jpg');
+  const localImage = require('../../assets/images/forest.jpg');
   return (
     <SafeAreaProvider>
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
