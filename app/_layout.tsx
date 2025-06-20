@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, Slot } from "expo-router";
 import './globals.css';
 import {SpeciesAnalysisProvider} from "./(tabs)/speciesAnalysis";
 

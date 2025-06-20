@@ -8,7 +8,7 @@ export default function Welcome() {
 
   return (
     <ImageBackground
-      source={require("../assets/images/hortensias.jpg")}
+      source={require("../assets/images/newphoto.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
