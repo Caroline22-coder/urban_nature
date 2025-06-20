@@ -62,7 +62,7 @@ const Saved = () => {
 
   return (
     <ImageBackground
-  source={require('../../assets/images/Background 1.png')}
+  source={require('../../assets/images/Background 2.png')}
   style={styles.container}
   resizeMode="cover"
 >
