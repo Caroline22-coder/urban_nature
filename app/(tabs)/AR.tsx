@@ -132,10 +132,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#2d2d2d',
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     borderRadius: 16,
     elevation: 2,
-    marginHorizontal: 4, // Add this line for spacing between buttons
+    marginHorizontal: 2, // Add this line for spacing between buttons
   },
   buttonText: {
     color: '#fff',
