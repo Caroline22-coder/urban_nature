@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, Text, View, Alert, TouchableOpacity, ImageBackground } from "react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -163,6 +163,11 @@ const uploadToAirtable = async () => {
   };
 
   return (
+    <ImageBackground
+      source={require('../../assets/images/identify.jpg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
     <View style={styles.container}>
       {!uri ? (
         <Button title="Take a picture" onPress={takePicture} />
@@ -186,6 +191,8 @@ const uploadToAirtable = async () => {
         </View>
       )}
     </View>
+     </ImageBackground>
+
   );
 }
 
@@ -195,5 +202,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 });
