@@ -113,7 +113,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.215.177:5000/analyze", {
+      const response = await fetch("http://172.18.105.106:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -176,7 +176,7 @@ const uploadToAirtable = async () => {
     <View style={styles.container}>
       {!uri ? (
         <TouchableOpacity onPress={takePicture} activeOpacity={0.6}>
-  <Text style={styles.text}>Click here to take a picture of a tree or a flower!</Text>
+  <Text style={styles.text}>Click here to take a picture of a species!</Text>
 </TouchableOpacity>
       ) : (
         <View>
