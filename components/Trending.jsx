@@ -49,7 +49,7 @@ const TrendingItem = ({ isActive, item, onPress }) => (
         source={item.image}
         style={{
           width: 220,
-          height: 320,
+          height: 220,
           borderRadius: 16,
           overflow: 'hidden',
         }}

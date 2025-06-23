@@ -62,18 +62,13 @@ const Saved = () => {
 
   return (
     <ImageBackground
-  source={require('../../assets/images/Background 3.png')}
+  source={require('../../assets/images/greenery.jpg')}
   style={styles.container}
   resizeMode="cover"
 >
     <View style={styles.container}>
       
-      <Text style={styles.title}>Nature for</Text>
-      <Text style={styles.title}>Nature/You/Society</Text>
-      <Text style={styles.subsubtitle}>
-        Bring nature to life!</Text>
-      <Text style={styles.subtitle}>
-        Use AR to explore biodiversity-friendly designs right where you stand!</Text>
+      
       <Trending posts={posts} />
 
       <View style={styles.buttonContainer}>
