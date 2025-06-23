@@ -55,7 +55,7 @@ const TrendingItem = ({ isActive, item, onPress }) => (
         }}
         resizeMode="cover"
       />
-      <Text style={{ color: '#222', marginTop: 8 }}>{item.name}</Text>
+      <Text style={{ color: '#fff', marginTop: 8 }}>{item.name}</Text>
     </Animatable.View>
   </TouchableOpacity>
 );
