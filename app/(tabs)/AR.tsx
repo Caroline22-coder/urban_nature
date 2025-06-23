@@ -1,12 +1,9 @@
 import React from 'react'
-import { View, Text, Button, Linking, Platform, Alert, StyleSheet, TouchableOpacity, ImageBackground, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import Trending from "../../components/Trending";
-import { LinearGradient } from 'expo-linear-gradient';
 
 const posts = [
-  
   {
     id: 1,
     name: 'Bushes',
@@ -33,107 +30,89 @@ const posts = [
   }
 ];
 
-const openSceneViewer = async (modelUrl: string) => {
-  const sceneViewerUrl = `https://arvr.google.com/scene-viewer/1.0?file=${encodeURIComponent(
-    modelUrl
-  )}&mode=ar_preferred`;
-
-  if (Platform.OS === 'android') {
-    try {
-      await Linking.openURL(sceneViewerUrl);
-    } catch (error) {
-      Alert.alert('Error', 'Could not open AR Scene Viewer.');
-    }
-  } else {
-    Alert.alert('Not supported', 'Scene Viewer is only available on Android devices.');
-  }
+const openLink1 = () => {
+  Linking.openURL('https://survey123.arcgis.com/share/a74d56b672024af38d42cfea630305b3');
 };
 
-const openLink1 = () => {
-    Linking.openURL('https://survey123.arcgis.com/share/a74d56b672024af38d42cfea630305b3');
-  };
-
-  const openLink2 = () => {
-    Linking.openURL('https://arcg.is/0ffzv52');
-  };
+const openLink2 = () => {
+  Linking.openURL('https://arcg.is/0ffzv52');
+};
 
 const Saved = () => {
   const router = useRouter();
 
   return (
     <ImageBackground
-  source={require('../../assets/images/greenery.jpg')}
-  style={styles.container}
-  resizeMode="cover"
->
-    <View style={styles.container}>
-      
-      
-      <Trending posts={posts} />
+      source={require('../../assets/images/greenery.jpg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Explore AR Nature Designs</Text>
+        <Trending posts={posts} />
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={openLink1}>
-          <Text style={styles.buttonText}>Submit your AR design!</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={openLink2}>
-          <Text style={styles.buttonText}>Rate our app</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.transparentButton} onPress={openLink1}>
+            <Text style={styles.transparentButtonText}>Submit your AR design!</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.transparentButton} onPress={openLink2}>
+            <Text style={styles.transparentButtonText}>Rate our app</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-   </ImageBackground> 
+    </ImageBackground>
   );
 };
 
 export default Saved;
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    alignItems: 'flex-start',
-    paddingTop: 20,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    paddingTop: 48,
     paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#194038',
-    marginBottom: 8,
-    marginTop: 8,
-    textAlign: 'left',
-  },
-  subsubtitle: {
-    fontSize: 18,
-    color: '#357960',
-    marginBottom: 8,
-    textAlign: 'left',
-    fontStyle: 'italic',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#194038',
+    color: '#fff',
+    textAlign: 'center',
     marginBottom: 24,
-    textAlign: 'left',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 6,
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 100, // Adjust to sit above the tab bar
+    bottom: 120,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    justifyContent: 'center',
     paddingHorizontal: 20,
     zIndex: 10,
   },
-  button: {
-    backgroundColor: '#2d2d2d',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    elevation: 2,
-    marginHorizontal: 2, // Add this line for spacing between buttons
+  transparentButton: {
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 22,
+    marginHorizontal: 6,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
   },
-  buttonText: {
+  transparentButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
 });
