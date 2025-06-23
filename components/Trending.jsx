@@ -1,6 +1,9 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, ImageBackground, Linking, Platform, Alert } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, Linking, Platform, Alert, Dimensions } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+
+const { width } = Dimensions.get('window');
+const ITEM_WIDTH = 220 + 20; // card width + marginRight
 
 const zoomIn = {
   0: { scale: 0.9 },
@@ -28,18 +31,17 @@ const openSceneViewer = async (modelUrl) => {
   }
 };
 
-const TrendingItem = ({ activeItem, item, onPress }) => (
+const TrendingItem = ({ isActive, item, onPress }) => (
   <TouchableOpacity
     activeOpacity={0.7}
     onPress={() => {
       onPress(item.id);
       openSceneViewer(item.url);
-      
     }}
     style={{ marginRight: 20 }}
   >
     <Animatable.View
-      animation={activeItem === item.id ? zoomIn : zoomOut}
+      animation={isActive ? zoomIn : zoomOut}
       duration={500}
       style={{ alignItems: 'center' }}
     >
@@ -59,21 +61,34 @@ const TrendingItem = ({ activeItem, item, onPress }) => (
 );
 
 const Trending = ({ posts }) => {
-  const [activeItem, setActiveItem] = React.useState(posts[1]?.id);
+  const [activeIndex, setActiveIndex] = useState(1);
+  const flatListRef = useRef();
+
+  const onScroll = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const newIndex = Math.round(offsetX / ITEM_WIDTH);
+    setActiveIndex(newIndex);
+  };
 
   return (
     <FlatList
+      ref={flatListRef}
       data={posts}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <TrendingItem
-          activeItem={activeItem}
+          isActive={activeIndex === index}
           item={item}
-          onPress={setActiveItem}
+          onPress={() => setActiveIndex(index)}
         />
       )}
       horizontal
       showsHorizontalScrollIndicator={false}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
+      snapToInterval={ITEM_WIDTH}
+      decelerationRate="fast"
+      contentContainerStyle={{ paddingLeft: 0, paddingRight: 0 }}
     />
   );
 };
