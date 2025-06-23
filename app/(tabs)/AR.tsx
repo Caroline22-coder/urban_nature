@@ -1,7 +1,9 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Linking } from 'react-native';
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import Trending from "../../components/Trending";
+import { WebView } from 'react-native-webview';
+import { Ionicons } from '@expo/vector-icons';
 
 const posts = [
   {
@@ -29,17 +31,33 @@ const posts = [
     image: require('../../assets/images/MixTreesRow.png'),
   }
 ];
-
-const openLink1 = () => {
-  Linking.openURL('https://survey123.arcgis.com/share/a74d56b672024af38d42cfea630305b3');
-};
-
-const openLink2 = () => {
-  Linking.openURL('https://arcg.is/0ffzv52');
-};
-
 const Saved = () => {
+  const [webViewUrl, setWebViewUrl] = useState<string | null>(null);
   const router = useRouter();
+
+  const openLink1 = () => {
+    setWebViewUrl('https://survey123.arcgis.com/share/a74d56b672024af38d42cfea630305b3');
+  };
+
+  const openLink2 = () => {
+    setWebViewUrl('https://arcg.is/0ffzv52');
+  };
+
+  const closeWebView = () => setWebViewUrl(null);
+
+  if (webViewUrl) {
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#222', padding: 12 }}>
+          <TouchableOpacity onPress={closeWebView}>
+            <Ionicons name="arrow-back" size={28} color="#fff" />
+          </TouchableOpacity>
+          <Text style={{ color: '#fff', fontSize: 18, marginLeft: 12 }}>Back</Text>
+        </View>
+        <WebView source={{ uri: webViewUrl }} style={{ flex: 1 }} />
+      </View>
+    );
+  }
 
   return (
     <ImageBackground
