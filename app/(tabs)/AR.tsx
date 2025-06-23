@@ -46,18 +46,18 @@ const Saved = () => {
   const closeWebView = () => setWebViewUrl(null);
 
   if (webViewUrl) {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#222', padding: 12 }}>
-          <TouchableOpacity onPress={closeWebView}>
-            <Ionicons name="arrow-back" size={28} color="#fff" />
-          </TouchableOpacity>
-          <Text style={{ color: '#fff', fontSize: 18, marginLeft: 12 }}>Back</Text>
-        </View>
-        <WebView source={{ uri: webViewUrl }} style={{ flex: 1 }} />
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={styles.webviewHeader}>
+        <TouchableOpacity style={styles.backCircle} onPress={closeWebView}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.goBackText}>Go Back</Text>
       </View>
-    );
-  }
+      <WebView source={{ uri: webViewUrl }} style={{ flex: 1 }} />
+    </View>
+  );
+}
 
   return (
     <ImageBackground
@@ -129,5 +129,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     letterSpacing: 0.5,
+  },
+  webviewHeader: {
+    alignItems: 'center',
+    marginTop: 32,
+    marginBottom: 12,
+    backgroundColor: 'green'
+  },
+  backCircle: {
+    backgroundColor: 'rgba(0,0,0,0.18)',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  goBackText: {
+    color: '#fff',
+    fontSize: 16,
+    marginTop: 8,
+    fontWeight: '500',
   },
 });

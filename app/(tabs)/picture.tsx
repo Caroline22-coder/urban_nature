@@ -109,7 +109,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.167.177s:5000/analyze", {
+      const response = await fetch("http://172.18.105.106:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -190,7 +190,7 @@ const uploadToAirtable = async () => {
           {analysisResult && (
   <Button title="Upload to Airtable" onPress={uploadToAirtable} />
 )}
-          <Button title="View on the map" onPress={() => router.push("/map")} />
+          
         </View>
       )}
     </View>
