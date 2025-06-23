@@ -85,9 +85,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     marginBottom: 24,
-    textShadowColor: '#000',
-    textShadowOffset: { width: 1, height: 2 },
-    textShadowRadius: 6,
   },
   buttonContainer: {
     position: 'absolute',
