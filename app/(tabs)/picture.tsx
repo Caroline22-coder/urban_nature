@@ -25,10 +25,6 @@ export default function App() {
   const AIRTABLE_API_KEY = 'patoqivXcP3in1xUG.2c30536ebb5360d066b5fa9f0bac25c11e847d4e7bf2c1f5c45591f0c49b70f3';
   const AIRTABLE_BASE_ID = 'appfpAaw5R6A2Wuzt';
   const AIRTABLE_TABLE_NAME = 'Observations';
-  const S3_BUCKET = 'ucd-sdl-projects';
-  const REGION = 'eu-north-1';
-  
-
 
 const uploadToAirtable = async () => {
   if (!analysisResult || !location || !uri) {
@@ -113,7 +109,7 @@ const uploadToAirtable = async () => {
     } as any);
 
     try {
-      const response = await fetch("http://172.18.105.106:5000/analyze", {
+      const response = await fetch("http://192.168.167.177s:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
