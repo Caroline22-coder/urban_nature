@@ -22,9 +22,9 @@ export default function App() {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const { addAnalysis } = useSpeciesAnalysis();
-  const AIRTABLE_API_KEY = 'pat9V5291QvAKblsD.00cf099f8a8f1c60ddee3c302e77a61c6f4403cd4cb68338b1c2972ad894293f';
-  const AIRTABLE_BASE_ID = 'appqp0rAAmpnX0LBV';
-  const AIRTABLE_TABLE_NAME = 'Publications';
+  const AIRTABLE_API_KEY = 'patoqivXcP3in1xUG.2c30536ebb5360d066b5fa9f0bac25c11e847d4e7bf2c1f5c45591f0c49b70f3';
+  const AIRTABLE_BASE_ID = 'appfpAaw5R6A2Wuzt';
+  const AIRTABLE_TABLE_NAME = 'Observations';
   const S3_BUCKET = 'ucd-sdl-projects';
   const REGION = 'eu-north-1';
   
