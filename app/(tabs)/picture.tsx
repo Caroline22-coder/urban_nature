@@ -150,7 +150,7 @@ export default function App() {
     await Sharing.shareAsync(fileUri);
   };
 
-  const localImage = require('../../assets/images/forest.jpg');
+  const localImage = require('../../assets/images/garden.jpg');
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['left', 'right']}>
