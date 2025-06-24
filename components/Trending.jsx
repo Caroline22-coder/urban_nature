@@ -34,17 +34,10 @@ const openSceneViewer = async (modelUrl) => {
 const TrendingItem = ({ isActive, item, onPress }) => (
   <TouchableOpacity
     activeOpacity={0.7}
-    onPress={() => {
-      onPress(item.id);
-      openSceneViewer(item.url);
-    }}
+    onPress={onPress}
     style={{ marginRight: 20 }}
   >
-    <Animatable.View
-      animation={isActive ? zoomIn : zoomOut}
-      duration={500}
-      style={{ alignItems: 'center' }}
-    >
+    <View style={{ alignItems: 'center' }}>
       <ImageBackground
         source={item.image}
         style={{
@@ -56,7 +49,7 @@ const TrendingItem = ({ isActive, item, onPress }) => (
         resizeMode="cover"
       />
       <Text style={{ color: '#fff', marginTop: 8 }}>{item.name}</Text>
-    </Animatable.View>
+    </View>
   </TouchableOpacity>
 );
 
