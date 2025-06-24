@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   },
   webviewHeader: {
     alignItems: 'center',
+    flexDirection: 'row',
     marginTop: 32,
     marginBottom: 12,
     backgroundColor: 'green'
