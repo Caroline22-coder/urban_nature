@@ -88,6 +88,28 @@ export default function App() {
     }
   };
 
+  // New: pick from gallery
+  const pickFromGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "Media library permission is required.");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setUri(result.assets[0].uri);
+      setAnalysisResult(null);
+      let loc = await Location.getCurrentPositionAsync({});
+      setLocation({
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+      });
+    }
+  };
+
   const analyzeSpecies = async () => {
     if (!uri) {
       Alert.alert("No image found", "Please take a picture first.");
@@ -161,55 +183,59 @@ export default function App() {
         >
           <View style={styles.container}>
             {!uri ? (
-              <TouchableOpacity style={styles.button} onPress={takePicture} activeOpacity={0.6}>
-                <Text style={styles.text}>Take a picture</Text>
-              </TouchableOpacity>
+              <View style={{ gap: 12, alignItems: 'center' }}>
+                <TouchableOpacity style={styles.button} onPress={takePicture} activeOpacity={0.6}>
+                  <Text style={styles.text}>Take a picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={pickFromGallery} activeOpacity={0.6}>
+                  <Text style={styles.text}>Upload from device</Text>
+                </TouchableOpacity>
+              </View>
             ) : (
-               <View style={styles.modalContent}>
-    <Image
-      source={{ uri }}
-      contentFit="contain"
-      style={{ width: 300, aspectRatio: 1 }}
-    />
-    <Text style={{ marginTop: 8, marginBottom: 8 }}>
-      Latitude: {location?.latitude ?? "N/A"} {"\n"}
-      Longitude: {location?.longitude ?? "N/A"}
-    </Text>
-    <TouchableOpacity style={styles.closeButton} onPress={() => setUri(null)}>
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Take another picture</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.closeButton} onPress={analyzeSpecies}>
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Analyse the species</Text>
-    </TouchableOpacity>
-    {analysisResult && (
-      <TouchableOpacity style={styles.closeButton} onPress={uploadToAirtable}>
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Upload to Airtable</Text>
-      </TouchableOpacity>
-    )}
-  </View>
-              
+              <View style={styles.modalContent}>
+                <Image
+                  source={{ uri }}
+                  contentFit="contain"
+                  style={{ width: 300, aspectRatio: 1 }}
+                />
+                <Text style={{ marginTop: 8, marginBottom: 8 }}>
+                  Latitude: {location?.latitude ?? "N/A"} {"\n"}
+                  Longitude: {location?.longitude ?? "N/A"}
+                </Text>
+                <TouchableOpacity style={styles.closeButton} onPress={() => setUri(null)}>
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Take another picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.closeButton} onPress={analyzeSpecies}>
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Analyse the species</Text>
+                </TouchableOpacity>
+                {analysisResult && (
+                  <TouchableOpacity style={styles.closeButton} onPress={uploadToAirtable}>
+                    <Text style={{ color: "#fff", fontWeight: "bold" }}>Upload to Airtable</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
           </View>
           {/* Custom Modal for Success Message */}
           <Modal
-  visible={showSuccess}
-  transparent
-  animationType="fade"
-  onRequestClose={() => setShowSuccess(false)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContent}>
-      <Text style={styles.modalTitle}>Success</Text>
-      <Text style={styles.modalText}>Data uploaded to Airtable!</Text>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => setShowSuccess(false)}
-      >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
+            visible={showSuccess}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowSuccess(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Success</Text>
+                <Text style={styles.modalText}>Data uploaded to Airtable!</Text>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowSuccess(false)}
+                >
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           {/* Custom Modal for Analysis Result */}
           <Modal
             visible={showResult}
