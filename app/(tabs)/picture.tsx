@@ -18,6 +18,7 @@ export default function App() {
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [showResult, setShowResult] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { addAnalysis } = useSpeciesAnalysis();
   const AIRTABLE_API_KEY = 'patoqivXcP3in1xUG.2c30536ebb5360d066b5fa9f0bac25c11e847d4e7bf2c1f5c45591f0c49b70f3';
   const AIRTABLE_BASE_ID = 'appfpAaw5R6A2Wuzt';
@@ -52,7 +53,7 @@ export default function App() {
       );
       const result = await response.json();
       if (result.id) {
-        Alert.alert('Success', 'Data uploaded to Airtable!');
+        setShowSuccess(true);
       } else {
         Alert.alert('Upload failed', JSON.stringify(result));
       }
@@ -189,6 +190,26 @@ export default function App() {
               
             )}
           </View>
+          {/* Custom Modal for Success Message */}
+          <Modal
+  visible={showSuccess}
+  transparent
+  animationType="fade"
+  onRequestClose={() => setShowSuccess(false)}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Success</Text>
+      <Text style={styles.modalText}>Data uploaded to Airtable!</Text>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={() => setShowSuccess(false)}
+      >
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
           {/* Custom Modal for Analysis Result */}
           <Modal
             visible={showResult}
