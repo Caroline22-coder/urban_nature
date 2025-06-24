@@ -66,7 +66,8 @@ const Saved = () => {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <Text style={styles.title}>Explore AR Nature Designs</Text>
+        <Text style={[styles.title, { marginBottom: 4 }]}>Explore AR Nature</Text>
+        <Text style={styles.title}>Designs</Text>
         <Trending posts={posts} />
 
         <View style={styles.buttonContainer}>
@@ -94,12 +95,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 48,
     paddingHorizontal: 16,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+   
     color: '#fff',
     textAlign: 'center',
     marginBottom: 24,
