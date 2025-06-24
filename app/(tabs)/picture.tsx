@@ -164,22 +164,29 @@ export default function App() {
                 <Text style={styles.text}>Take a picture</Text>
               </TouchableOpacity>
             ) : (
-              <View>
-                <Image
-                  source={{ uri }}
-                  contentFit="contain"
-                  style={{ width: 300, aspectRatio: 1 }}
-                />
-                <Text>
-                  Latitude: {location?.latitude ?? "N/A"} {"\n"}
-                  Longitude: {location?.longitude ?? "N/A"}
-                </Text>
-                <Button onPress={() => setUri(null)} title="Take another picture" />
-                <Button title="Analyse the species" onPress={analyzeSpecies} />
-                {analysisResult && (
-                  <Button title="Upload to Airtable" onPress={uploadToAirtable} />
-                )}
-              </View>
+               <View style={styles.modalContent}>
+    <Image
+      source={{ uri }}
+      contentFit="contain"
+      style={{ width: 300, aspectRatio: 1 }}
+    />
+    <Text style={{ marginTop: 8, marginBottom: 8 }}>
+      Latitude: {location?.latitude ?? "N/A"} {"\n"}
+      Longitude: {location?.longitude ?? "N/A"}
+    </Text>
+    <TouchableOpacity style={styles.closeButton} onPress={() => setUri(null)}>
+      <Text style={{ color: "#fff", fontWeight: "bold" }}>Take another picture</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.closeButton} onPress={analyzeSpecies}>
+      <Text style={{ color: "#fff", fontWeight: "bold" }}>Analyse the species</Text>
+    </TouchableOpacity>
+    {analysisResult && (
+      <TouchableOpacity style={styles.closeButton} onPress={uploadToAirtable}>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>Upload to Airtable</Text>
+      </TouchableOpacity>
+    )}
+  </View>
+              
             )}
           </View>
           {/* Custom Modal for Analysis Result */}
