@@ -5,11 +5,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { images } from "@/constants/images";
 
 const TabIcon = ({ focused, iconName, title }: any) => {
+     const containerClass =
+    "flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden";
+
   if (focused) {
     return (
       <ImageBackground
         source={images.button}
-        className="flex flex-row w-full flex-1 min-w-[112px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
+        className={containerClass}
       >
         <Ionicons name={iconName} size={22} color="white" />
         <Text className="text-white text-base ml-2">
@@ -19,7 +22,9 @@ const TabIcon = ({ focused, iconName, title }: any) => {
     );
   }
   return (
-    <Ionicons name={iconName} size={22} color="#b0b0b0" />
+     <View className={containerClass}>
+      <Ionicons name={iconName} size={22} color="#b0b0b0" />
+    </View>
   );
 };
 
