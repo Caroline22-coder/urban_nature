@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, View, Alert, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
+import { Button, StyleSheet, Text, View, Alert, TouchableOpacity, ImageBackground, Dimensions, Modal } from "react-native";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
@@ -8,11 +8,7 @@ import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
 import { useSpeciesAnalysis } from "./speciesAnalysis";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-
-
-
 import Constants from 'expo-constants';
-
 import { Ionicons } from '@expo/vector-icons';
 const { width, height } = Dimensions.get("window");
 
@@ -21,54 +17,50 @@ export default function App() {
   const [uri, setUri] = useState<string | null>(null);
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [showResult, setShowResult] = useState(false);
   const { addAnalysis } = useSpeciesAnalysis();
   const AIRTABLE_API_KEY = 'patoqivXcP3in1xUG.2c30536ebb5360d066b5fa9f0bac25c11e847d4e7bf2c1f5c45591f0c49b70f3';
   const AIRTABLE_BASE_ID = 'appfpAaw5R6A2Wuzt';
   const AIRTABLE_TABLE_NAME = 'Observations';
 
-const uploadToAirtable = async () => {
-  if (!analysisResult || !location || !uri) {
-    Alert.alert("Nothing to upload", "Please analyze a picture first.");
-    return;
-  }
-  try {
-   
-
-    
-
-    
-    const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fields: {
-            common_name: String(analysisResult.common_name),
-            scientific_name: String(analysisResult.scientific_name),
-            family: String(analysisResult.family),
-            genus: String(analysisResult.genus),
-            score: String(analysisResult.score),
-            latitude: String(location.latitude),
-            longitude: String(location.longitude),
-          }
-        }),
-      }
-    );
-    const result = await response.json();
-    if (result.id) {
-      Alert.alert('Success', 'Data uploaded to Airtable!');
-    } else {
-      Alert.alert('Upload failed', JSON.stringify(result));
+  const uploadToAirtable = async () => {
+    if (!analysisResult || !location || !uri) {
+      Alert.alert("Nothing to upload", "Please analyze a picture first.");
+      return;
     }
-  } catch (e) {
-    Alert.alert('Error', 'Failed to upload to Airtable.');
-    console.error('Airtable upload error:', e);
-  }
-};
+    try {
+      const response = await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fields: {
+              common_name: String(analysisResult.common_name),
+              scientific_name: String(analysisResult.scientific_name),
+              family: String(analysisResult.family),
+              genus: String(analysisResult.genus),
+              score: String(analysisResult.score),
+              latitude: String(location.latitude),
+              longitude: String(location.longitude),
+            }
+          }),
+        }
+      );
+      const result = await response.json();
+      if (result.id) {
+        Alert.alert('Success', 'Data uploaded to Airtable!');
+      } else {
+        Alert.alert('Upload failed', JSON.stringify(result));
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Failed to upload to Airtable.');
+      console.error('Airtable upload error:', e);
+    }
+  };
 
   const takePicture = async () => {
     const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
@@ -133,10 +125,7 @@ const uploadToAirtable = async () => {
       if (data.error) {
         Alert.alert("Error", data.error);
       } else {
-        Alert.alert(
-          "Analysis Result",
-          `Common Name: ${data.common_name}\nScientific Name: ${data.scientific_name}\nFamily: ${data.family}\nGenus: ${data.genus}\nScore: ${data.score}\nLatitude: ${location?.latitude}\nLongitude: ${location?.longitude}`
-        );
+        setShowResult(true); // Show custom modal
       }
     } catch (error) {
       Alert.alert("Error", "Failed to analyze the species.");
@@ -163,41 +152,65 @@ const uploadToAirtable = async () => {
   const localImage = require('../../assets/images/forest.jpg');
   return (
     <SafeAreaProvider>
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
-    <ImageBackground
-      source={localImage}
-      style={styles.background}
-      resizeMode="cover"
-    >
-    <View style={styles.container}>
-      {!uri ? (
-        <TouchableOpacity style={styles.button} onPress={takePicture} activeOpacity={0.6}>
-  <Text style={styles.text}>Take a picture</Text>
-</TouchableOpacity>
-      ) : (
-        <View>
-          <Image
-            source={{ uri }}
-            contentFit="contain"
-            style={{ width: 300, aspectRatio: 1 }}
-          />
-          <Text>
-            Latitude: {location?.latitude ?? "N/A"} {"\n"}
-            Longitude: {location?.longitude ?? "N/A"}
-          </Text>
-          <Button onPress={() => setUri(null)} title="Take another picture" />
-          <Button title="Analyse the species" onPress={analyzeSpecies} />
-          {analysisResult && (
-  <Button title="Upload to Airtable" onPress={uploadToAirtable} />
-)}
-          
-        </View>
-      )}
-    </View>
-     </ImageBackground>
-     </SafeAreaView>
-  </SafeAreaProvider>
-
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
+        <ImageBackground
+          source={localImage}
+          style={styles.background}
+          resizeMode="cover"
+        >
+          <View style={styles.container}>
+            {!uri ? (
+              <TouchableOpacity style={styles.button} onPress={takePicture} activeOpacity={0.6}>
+                <Text style={styles.text}>Take a picture</Text>
+              </TouchableOpacity>
+            ) : (
+              <View>
+                <Image
+                  source={{ uri }}
+                  contentFit="contain"
+                  style={{ width: 300, aspectRatio: 1 }}
+                />
+                <Text>
+                  Latitude: {location?.latitude ?? "N/A"} {"\n"}
+                  Longitude: {location?.longitude ?? "N/A"}
+                </Text>
+                <Button onPress={() => setUri(null)} title="Take another picture" />
+                <Button title="Analyse the species" onPress={analyzeSpecies} />
+                {analysisResult && (
+                  <Button title="Upload to Airtable" onPress={uploadToAirtable} />
+                )}
+              </View>
+            )}
+          </View>
+          {/* Custom Modal for Analysis Result */}
+          <Modal
+            visible={showResult}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowResult(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Analysis Result</Text>
+                <Text style={styles.modalText}>Common Name: {analysisResult?.common_name}</Text>
+                <Text style={styles.modalText}>Scientific Name: {analysisResult?.scientific_name}</Text>
+                <Text style={styles.modalText}>Family: {analysisResult?.family}</Text>
+                <Text style={styles.modalText}>Genus: {analysisResult?.genus}</Text>
+                <Text style={styles.modalText}>Score: {analysisResult?.score}</Text>
+                <Text style={styles.modalText}>Latitude: {location?.latitude}</Text>
+                <Text style={styles.modalText}>Longitude: {location?.longitude}</Text>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowResult(false)}
+                >
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </ImageBackground>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -215,12 +228,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  borderRadius: 8,
-  alignSelf: 'center',
-},
-   text: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    alignSelf: 'center',
+  },
+  text: {
     color: 'white',
     fontSize: 18,
     lineHeight: 34,
@@ -231,4 +244,32 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     overflow: 'hidden',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    width: 320,
+    alignItems: 'center'
+  },
+  modalTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginBottom: 12
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 4
+  },
+  closeButton: {
+    marginTop: 18,
+    backgroundColor: "#4caf50",
+    borderRadius: 8,
+    padding: 10
+  }
 });
