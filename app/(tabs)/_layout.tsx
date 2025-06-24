@@ -14,7 +14,7 @@ const TabIcon = ({ focused, iconName, title }: any) => {
         source={images.button}
         className={containerClass}
       >
-        <Ionicons name={iconName} size={22} color="white" />
+        <Ionicons name={iconName} size={18} color="white" />
         <Text className="text-white text-base ml-2">
           {title}
         </Text>
@@ -23,7 +23,7 @@ const TabIcon = ({ focused, iconName, title }: any) => {
   }
   return (
      <View className={containerClass}>
-      <Ionicons name={iconName} size={22} color="#b0b0b0" />
+      <Ionicons name={iconName} size={18} color="#b0b0b0" />
     </View>
   );
 };
