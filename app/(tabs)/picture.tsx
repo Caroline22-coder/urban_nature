@@ -124,7 +124,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.186.177:5000/analyze", {
+      const response = await fetch("http://192.168.25.177:5000/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -188,7 +188,7 @@ export default function App() {
                   <Text style={styles.text}>Take a picture</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={pickFromGallery} activeOpacity={0.6}>
-                  <Text style={styles.text}>Upload from device</Text>
+                  <Text style={styles.text}>Upload a picture</Text>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -250,7 +250,6 @@ export default function App() {
                 <Text style={styles.modalText}>Scientific Name: {analysisResult?.scientific_name}</Text>
                 <Text style={styles.modalText}>Family: {analysisResult?.family}</Text>
                 <Text style={styles.modalText}>Genus: {analysisResult?.genus}</Text>
-                <Text style={styles.modalText}>Score: {analysisResult?.score}</Text>
                 <Text style={styles.modalText}>Latitude: {location?.latitude}</Text>
                 <Text style={styles.modalText}>Longitude: {location?.longitude}</Text>
                 <TouchableOpacity
