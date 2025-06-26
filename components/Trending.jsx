@@ -34,7 +34,10 @@ const openSceneViewer = async (modelUrl) => {
 const TrendingItem = ({ isActive, item, onPress }) => (
   <TouchableOpacity
     activeOpacity={0.7}
-    onPress={onPress}
+    onPress={() => {
+      onPress && onPress(); // keep existing logic if needed
+      openSceneViewer(item.url); // open AR Scene Viewer
+    }}
     style={{ marginRight: 20 }}
   >
     <View style={{ alignItems: 'center' }}>

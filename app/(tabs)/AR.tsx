@@ -68,7 +68,10 @@ const Saved = () => {
       <View style={styles.overlay}>
         <Text style={[styles.title, { marginBottom: 4 }]}>Explore AR Nature</Text>
         <Text style={styles.title}>Designs</Text>
-        <Trending posts={posts} />
+        <Trending 
+          posts={posts}
+          
+        />
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.transparentButton} onPress={openLink1}>
