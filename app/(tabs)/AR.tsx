@@ -9,26 +9,32 @@ const posts = [
   {
     id: 1,
     name: 'Bushes',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/viroRes/bushes.glb',
+    url: 'https://raw.githubusercontent.com/Caroline22-coder/arfiles/main/bushes.glb',
     image: require('../../assets/images/Bushes.png'),
   },
   {
     id: 2,
     name: 'Meadow',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/meadow.glb',
+    url: 'https://raw.githubusercontent.com/Caroline22-coder/arfiles/main/meadow.glb',
     image: require('../../assets/images/Meadow.png'),
   },
   {
     id: 3,
     name: 'Mix planting',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_planting.glb',
+    url: 'https://raw.githubusercontent.com/Caroline22-coder/arfiles/main/mix_planting.glb',
     image: require('../../assets/images/MixPlanting.png'),
   },
   {
     id: 4,
     name: 'Mix trees row',
-    url: 'https://raw.githubusercontent.com/Caroline21-coder/viro-react-starter-kit/main/mix_trees_row.glb',
+    url: 'https://raw.githubusercontent.com/Caroline22-coder/arfiles/main/mix_trees_row.glb',
     image: require('../../assets/images/MixTreesRow.png'),
+  },
+   {
+    id: 5,
+    name: 'Single tree',
+    url: 'https://raw.githubusercontent.com/Caroline22-coder/arfiles/main/single_tree.glb',
+    image: require('../../assets/images/SingleTree.png'),
   }
 ];
 const Saved = () => {
