@@ -124,7 +124,7 @@ export default function App() {
     } as any);
 
     try {
-      const response = await fetch("http://192.168.195.177:5000/analyze", {
+      const response = await fetch("https://backend-cxwq.onrender.com/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
