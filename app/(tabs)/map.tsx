@@ -6,7 +6,7 @@ export default function MapWebView() {
   return (
     <View style={styles.container}>
       <WebView
-        source={{ uri: 'https://ucdirelandeu.maps.arcgis.com/apps/mapviewer/index.html?webmap=50abb98efab44bf0bbca27031c3dc81a'}}
+        source={{ uri: 'https://arcg.is/Snbba0'}}
                         style={{ flex: 1 }}
       />
     </View>

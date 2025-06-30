@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TreeExplorer",
-    "slug": "mobile_tree_app",
+    "name": "UrbanNatureAR",
+    "slug": "urban_nature_ar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
