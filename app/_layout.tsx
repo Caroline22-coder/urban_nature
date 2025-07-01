@@ -1,6 +1,6 @@
 import { Stack, Slot } from "expo-router";
 import './globals.css';
-import {SpeciesAnalysisProvider} from "./(tabs)/speciesAnalysis";
+import {SpeciesAnalysisProvider} from "../components/speciesAnalysis";
 
 export default function RootLayout() {
   return (

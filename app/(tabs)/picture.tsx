@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { useRouter } from "expo-router";
-import { useSpeciesAnalysis } from "./speciesAnalysis";
+import { useSpeciesAnalysis } from "../../components/speciesAnalysis";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
