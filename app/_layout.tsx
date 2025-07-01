@@ -14,10 +14,6 @@ export default function RootLayout() {
         name="(tabs)" 
         options={{ headerShown: false }} 
       />
-      <Stack.Screen 
-        name="tree/[id]" 
-        options={{ headerShown: false }} 
-      />
     </Stack>
   </SpeciesAnalysisProvider>
   );
